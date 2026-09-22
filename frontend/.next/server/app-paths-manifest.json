@@ -1,3 +1,15 @@
 {
-  "/page": "app/page.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/login/page": "app/login/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/packages/page": "app/packages/page.js",
+  "/page": "app/page.js",
+  "/register/page": "app/register/page.js",
+  "/profile/page": "app/profile/page.js",
+  "/restaurants/page": "app/restaurants/page.js",
+  "/rooms/page": "app/rooms/page.js",
+  "/tours/page": "app/tours/page.js",
+  "/transport/page": "app/transport/page.js",
+  "/trips/page": "app/trips/page.js",
+  "/wellness/page": "app/wellness/page.js"
 }
