@@ -3,7 +3,8 @@ import Link from "next/link";
 const alerts = [
   {
     title: "VIP arrival checklist",
-    detail: "Concierge team requested final room setup for Suite 204 by 4:30 PM.",
+    detail:
+      "Concierge team requested final room setup for Suite 204 by 4:30 PM.",
     time: "2 mins ago",
     level: "critical",
   },
@@ -21,7 +22,8 @@ const alerts = [
   },
   {
     title: "Inventory update",
-    detail: "Breakfast inventory has dropped below the recommended reorder threshold.",
+    detail:
+      "Breakfast inventory has dropped below the recommended reorder threshold.",
     time: "3 hours ago",
     level: "warning",
   },
@@ -68,22 +70,30 @@ export default function NotificationsPage() {
             <div className="card-panel report-card">
               <span className="eyebrow">Urgent</span>
               <strong>03</strong>
-              <span className="pill" style={{ marginTop: 12 }}>Action needed</span>
+              <span className="pill" style={{ marginTop: 12 }}>
+                Action needed
+              </span>
             </div>
             <div className="card-panel report-card">
               <span className="eyebrow">Pending</span>
               <strong>12</strong>
-              <span className="pill" style={{ marginTop: 12 }}>Queued actions</span>
+              <span className="pill" style={{ marginTop: 12 }}>
+                Queued actions
+              </span>
             </div>
             <div className="card-panel report-card">
               <span className="eyebrow">Guest updates</span>
               <strong>21</strong>
-              <span className="pill" style={{ marginTop: 12 }}>Last 24h</span>
+              <span className="pill" style={{ marginTop: 12 }}>
+                Last 24h
+              </span>
             </div>
             <div className="card-panel report-card">
               <span className="eyebrow">Resolved</span>
               <strong>47</strong>
-              <span className="pill" style={{ marginTop: 12 }}>Today</span>
+              <span className="pill" style={{ marginTop: 12 }}>
+                Today
+              </span>
             </div>
           </section>
 
@@ -102,7 +112,9 @@ export default function NotificationsPage() {
                         </p>
                       </div>
                       <div style={{ textAlign: "right" }}>
-                        <span className={`badge ${alert.level}`}>{alert.time}</span>
+                        <span className={`badge ${alert.level}`}>
+                          {alert.time}
+                        </span>
                       </div>
                     </div>
                   </li>

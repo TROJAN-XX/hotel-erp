@@ -8,10 +8,25 @@ const inventoryOverview = [
 ];
 
 const stockRows = [
-  { item: "Fresh linens", status: "Healthy", count: "620 units", reorder: "No" },
-  { item: "Breakfast ingredients", status: "Low", count: "84 units", reorder: "Yes" },
+  {
+    item: "Fresh linens",
+    status: "Healthy",
+    count: "620 units",
+    reorder: "No",
+  },
+  {
+    item: "Breakfast ingredients",
+    status: "Low",
+    count: "84 units",
+    reorder: "Yes",
+  },
   { item: "Spa oils", status: "Healthy", count: "240 units", reorder: "No" },
-  { item: "Housekeeping consumables", status: "Critical", count: "52 units", reorder: "Yes" },
+  {
+    item: "Housekeeping consumables",
+    status: "Critical",
+    count: "52 units",
+    reorder: "Yes",
+  },
   { item: "Bar spirits", status: "Healthy", count: "310 units", reorder: "No" },
 ];
 
@@ -64,8 +79,15 @@ export default function InventoryPage() {
               <div key={item.label} className="card-panel inventory-card">
                 <span className="eyebrow">{item.label}</span>
                 <strong>{item.value}</strong>
-                <span className={`badge ${item.tone}`} style={{ marginTop: 12 }}>
-                  {item.tone === "success" ? "Stable" : item.tone === "warning" ? "Monitor" : "Action"}
+                <span
+                  className={`badge ${item.tone}`}
+                  style={{ marginTop: 12 }}
+                >
+                  {item.tone === "success"
+                    ? "Stable"
+                    : item.tone === "warning"
+                      ? "Monitor"
+                      : "Action"}
                 </span>
               </div>
             ))}
