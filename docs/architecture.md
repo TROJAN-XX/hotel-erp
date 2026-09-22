@@ -195,13 +195,13 @@ The availability layer validates room, table, tour, spa, vehicle, and inventory 
 4. Booking and hotel reservation engine - completed
 5. Restaurant and bar modules - completed
 6. Tours and transport modules - completed
-7. Wellness and spa modules - in progress
+7. Wellness and spa modules - completed
 8. Pricing engine and package builder - completed
-9. Unified booking wizard and payments - pending
+9. Unified booking wizard and payments - completed
 10. Real-time inventory, reschedule and refund layers - pending
 11. Reports, notifications, and admin analytics - pending
 12. Testing, security review, and performance tuning - ongoing
 
 ## 11. Current State
 
-The repository is now running on a verified Next.js frontend and Django backend foundation. The hotel, room, booking, pricing, package, dining, and travel layers are implemented and validated. The next workstream is wellness and spa operations.
+The repository is now running on a verified Next.js frontend and Django backend foundation. The hotel, room, booking, pricing, package, dining, travel, wellness, and payment layers are implemented and validated. The next workstream is operational reporting and notification services.

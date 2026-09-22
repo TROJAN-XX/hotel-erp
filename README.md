@@ -81,12 +81,20 @@ python manage.py runserver
 - Tour and transport foundation for future booking workflows
 - Verified with Django API tests
 
-### Phase 7 - Wellness and spa modules: next
+### Phase 7 - Wellness and spa modules: completed
 
 - Spa and massage service catalog
 - Therapist and treatment management
 - Wellness booking foundations
+- Verified with Django API tests
+
+### Phase 8 - Payments and refunds: completed
+
+- Payment transaction and payment-method foundation
+- Refund request workflow and status tracking
+- Gateway-ready payment data model
+- Verified with Django API tests
 
 ## Notes
 
-The project is now implemented as a Next.js frontend and Django API backend, with hotel, booking, pricing, dining, and travel foundations validated. The next milestone is wellness and spa operations.
+The project is now implemented as a Next.js frontend and Django API backend, with hotel, booking, pricing, dining, travel, wellness, and payment foundations validated. The next milestone is operational reporting and notification flows.
