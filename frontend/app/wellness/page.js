@@ -1,15 +1,59 @@
-import Link from "next/link";
+"use client";
 
-const wellness = [
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { fetchApi, normalizeListResponse } from "../../lib/api";
+
+const fallbackWellness = [
   {
     name: "Signature Massage Therapy",
-    desc: "60 minute deep relaxation therapy",
+    description: "60 minute deep relaxation therapy",
   },
-  { name: "Detox Spa Ritual", desc: "Custom therapy with herbal-infused oils" },
-  { name: "Yoga & Breathwork", desc: "Guided sunrise wellness session" },
+  {
+    name: "Detox Spa Ritual",
+    description: "Custom therapy with herbal-infused oils",
+  },
+  { name: "Yoga & Breathwork", description: "Guided sunrise wellness session" },
 ];
 
 export default function WellnessPage() {
+  const [wellness, setWellness] = useState(fallbackWellness);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadWellness() {
+      try {
+        const response = await fetchApi("/wellness/services/");
+        const records = normalizeListResponse(response);
+
+        if (!isMounted) return;
+
+        if (records.length > 0) {
+          setWellness(
+            records.slice(0, 6).map((item) => ({
+              name: item.name || "Wellness session",
+              description:
+                item.description ||
+                `${item.category || "Therapy"} • ${item.duration_minutes || 60} min`,
+            })),
+          );
+        }
+      } catch (error) {
+        if (isMounted) setWellness(fallbackWellness);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    loadWellness();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <div className="customer-shell">
       <header className="topbar">
@@ -47,13 +91,16 @@ export default function WellnessPage() {
               <div key={item.name} className="card-panel room-card">
                 <div className="room-image placeholder-image" />
                 <h3>{item.name}</h3>
-                <p>{item.desc}</p>
+                <p>{item.description}</p>
                 <button className="button button-primary" type="button">
                   Book session
                 </button>
               </div>
             ))}
           </div>
+          {loading ? (
+            <p className="eyebrow">Loading wellness sessions…</p>
+          ) : null}
         </div>
       </main>
     </div>

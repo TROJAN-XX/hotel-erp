@@ -32,7 +32,7 @@ export default function RoomsPage() {
           <Link href="/login" className="button button-secondary">
             Login
           </Link>
-          <Link href="/register" className="button button-primary">
+          <Link href="/booking" className="button button-primary">
             Book Now
           </Link>
         </div>

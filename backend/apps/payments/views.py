@@ -4,7 +4,7 @@ from .models import PaymentTransaction, RefundRequest
 from .serializers import PaymentTransactionSerializer, RefundRequestSerializer
 
 
-class PaymentTransactionListView(generics.ListAPIView):
+class PaymentTransactionListView(generics.ListCreateAPIView):
     queryset = PaymentTransaction.objects.all().order_by("-created_at")
     serializer_class = PaymentTransactionSerializer
     permission_classes = [permissions.AllowAny]

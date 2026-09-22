@@ -1,19 +1,35 @@
-# Node
-frontend/node_modules
-frontend/dist
-frontend/.vite
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/dist/
+frontend/.vite/
+frontend/.vercel/
+frontend/coverage/
+frontend/*.tsbuildinfo
+frontend/npm-debug.log*
 
-# Python
-backend/.venv
-backend/__pycache__/
-backend/**/*.pyc
-backend/.pytest_cache
+# Python / Django
+backend/.venv/
+backend/**/__pycache__/
+backend/**/*.py[cod]
+backend/.pytest_cache/
+backend/.mypy_cache/
+backend/.coverage
+backend/htmlcov/
+backend/*.sqlite3
+backend/*.db
+backend/media/
+backend/staticfiles/
 
-# Env
+# Environment files
 .env
 .env.*
 !.env.example
 
-# OS
+# OS / editor
 .DS_Store
 Thumbs.db
+.vscode/
+.idea/
+*.log

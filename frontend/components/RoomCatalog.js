@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { fetchApi, normalizeListResponse } from "../lib/api";
 
@@ -92,6 +93,11 @@ export default function RoomCatalog() {
             <div className="card-row">
               <strong>{formatPrice(room.base_price)}</strong>
               <span className="pill">Available</span>
+            </div>
+            <div className="card-row room-actions">
+              <Link href="/booking" className="button button-primary">
+                Book now
+              </Link>
             </div>
           </article>
         ))}

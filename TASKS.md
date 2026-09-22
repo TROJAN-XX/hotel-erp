@@ -15,15 +15,16 @@
 
 ## In Progress
 
-- [ ] Create admin dashboard views backed by live data
-- [ ] Add booking workflow and reservation data wiring
-- [ ] Expand the remaining service pages to live backend data (restaurant, transport, wellness, trips)
+- [x] Create admin dashboard views backed by live data
+- [x] Add booking workflow and reservation data wiring
+- [x] Implement frontend-to-backend integration for the payment module
+- [x] Expand the remaining service pages to live backend data (restaurant, transport, wellness, trips)
 
 ## Next Step
 
-- [ ] Implement frontend-to-backend integration for the booking and payment modules
-- [ ] Add reservation forms and data submission flow
-- [ ] Validate end-to-end behavior with the running Django backend
+- [x] Add reservation confirmation and payment summary states
+- [x] Validate end-to-end behavior with the running Django backend
+- [ ] Add more service pages and dashboard action flows
 
 ## Proposed Phase After This
 

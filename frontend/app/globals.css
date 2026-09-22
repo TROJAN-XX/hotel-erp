@@ -35,12 +35,16 @@ a {
   text-decoration: none;
 }
 
-button, input {
+button, input, select, textarea {
   font: inherit;
 }
 
 button {
   cursor: pointer;
+}
+
+textarea {
+  resize: vertical;
 }
 
 #root {
@@ -413,6 +417,172 @@ input {
   flex: 1;
   padding: 32px;
   background: #f7f6f3;
+}
+
+.booking-page-shell {
+  max-width: 1200px;
+}
+
+.booking-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 0.8fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.booking-form-panel,
+.booking-summary {
+  padding: 24px;
+}
+
+.compact-header {
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+
+.booking-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.full-span {
+  grid-column: 1 / -1;
+}
+
+.booking-form label {
+  font-weight: 600;
+}
+
+.booking-form select,
+.booking-form input,
+.booking-form textarea {
+  width: 100%;
+  margin-top: 8px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--text);
+  padding: 10px 12px;
+}
+
+.status-banner {
+  margin-top: 18px;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-weight: 600;
+}
+
+.status-banner.success {
+  background: #eaf7ee;
+  color: #1d6a3d;
+  border: 1px solid #bfe3c8;
+}
+
+.status-banner.error {
+  background: #fff1f0;
+  color: #9d2f2f;
+  border: 1px solid #f2c0b9;
+}
+
+.booking-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.summary-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-alt);
+  padding: 18px;
+}
+
+.summary-card h4 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.summary-card p {
+  margin: 6px 0 16px;
+  color: var(--muted);
+}
+
+.summary-card ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.summary-card li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.total-box {
+  margin-top: 18px;
+  border-top: 1px solid var(--border);
+  padding-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.total-box strong {
+  font-size: 1.5rem;
+}
+
+.payment-page-shell {
+  max-width: 1200px;
+}
+
+.payment-layout {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.payment-panel,
+.payment-summary {
+  padding: 24px;
+}
+
+.payment-methods {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--text);
+}
+
+.radio-option input {
+  width: auto;
+  margin: 0;
+}
+
+.single-column {
+  grid-template-columns: 1fr;
+}
+
+.room-actions {
+  margin-top: 12px;
 }
 
 .chart-grid {

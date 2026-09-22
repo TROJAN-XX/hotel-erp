@@ -35,7 +35,7 @@ export default function HomePage() {
           <Link href="/login" className="button button-secondary">
             Login
           </Link>
-          <Link href="/register" className="button button-primary">
+          <Link href="/booking" className="button button-primary">
             Book Now
           </Link>
         </div>
@@ -52,8 +52,8 @@ export default function HomePage() {
                 and tailored packages designed for your ideal getaway.
               </p>
               <div className="hero-actions">
-                <Link href="/rooms" className="button button-primary">
-                  Explore stays
+                <Link href="/booking" className="button button-primary">
+                  Book a stay
                 </Link>
                 <Link href="/packages" className="button button-secondary">
                   View packages
@@ -90,12 +90,12 @@ export default function HomePage() {
                 </label>
               </div>
               <div className="action-row">
-                <button className="button button-primary" type="button">
+                <Link href="/booking" className="button button-primary">
                   Search Rooms
-                </button>
-                <button className="button button-secondary" type="button">
+                </Link>
+                <Link href="/packages" className="button button-secondary">
                   Explore Packages
-                </button>
+                </Link>
               </div>
             </div>
           </section>

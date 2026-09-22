@@ -1,12 +1,53 @@
-import Link from "next/link";
+"use client";
 
-const tours = [
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { fetchApi, normalizeListResponse } from "../../lib/api";
+
+const fallbackTours = [
   { name: "Munnar Valley Circuit", duration: "Full day" },
   { name: "Cultural Heritage Walk", duration: "Half day" },
   { name: "Tea Estate Expedition", duration: "Day trip" },
 ];
 
 export default function ToursPage() {
+  const [tours, setTours] = useState(fallbackTours);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadTours() {
+      try {
+        const response = await fetchApi("/tours/");
+        const records = normalizeListResponse(response);
+
+        if (!isMounted) return;
+
+        if (records.length > 0) {
+          setTours(
+            records.slice(0, 6).map((tour) => ({
+              name: tour.name || "Local discovery tour",
+              duration: tour.duration_hours
+                ? `${tour.duration_hours} hrs`
+                : tour.description || "Curated day tour",
+            })),
+          );
+        }
+      } catch (error) {
+        if (isMounted) setTours(fallbackTours);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    loadTours();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <div className="customer-shell">
       <header className="topbar">
@@ -51,6 +92,7 @@ export default function ToursPage() {
               </div>
             ))}
           </div>
+          {loading ? <p className="eyebrow">Loading tour packages…</p> : null}
         </div>
       </main>
     </div>

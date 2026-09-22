@@ -1,12 +1,69 @@
-import Link from "next/link";
+"use client";
 
-const transport = [
-  { name: "Airport Transfer", text: "Private pickup and drop" },
-  { name: "Luxury Chauffeur", text: "Hourly premium car service" },
-  { name: "Intercity Travel", text: "Curated destination rides" },
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { fetchApi, normalizeListResponse } from "../../lib/api";
+
+const fallbackTransport = [
+  { name: "Airport Transfer", description: "Private pickup and drop" },
+  { name: "Luxury Chauffeur", description: "Hourly premium car service" },
+  { name: "Intercity Travel", description: "Curated destination rides" },
 ];
 
 export default function TransportPage() {
+  const [transport, setTransport] = useState(fallbackTransport);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadTransport() {
+      try {
+        const [serviceResponse, vehicleResponse] = await Promise.allSettled([
+          fetchApi("/transport/services/"),
+          fetchApi("/transport/vehicles/"),
+        ]);
+
+        if (!isMounted) return;
+
+        const services = normalizeListResponse(
+          serviceResponse.status === "fulfilled" ? serviceResponse.value : [],
+        );
+        const vehicles = normalizeListResponse(
+          vehicleResponse.status === "fulfilled" ? vehicleResponse.value : [],
+        );
+
+        const liveTransport = services.length
+          ? services.slice(0, 6).map((service) => ({
+              name: service.name || "Transfer service",
+              description:
+                service.description ||
+                `${service.service_type || "Private"} travel support`,
+            }))
+          : vehicles.length
+            ? vehicles.slice(0, 6).map((vehicle) => ({
+                name: vehicle.name || "Luxury vehicle",
+                description:
+                  vehicle.service ||
+                  `${vehicle.capacity || "4"} seats • ${vehicle.base_price || 0} INR`,
+              }))
+            : fallbackTransport;
+
+        setTransport(liveTransport);
+      } catch (error) {
+        if (isMounted) setTransport(fallbackTransport);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    loadTransport();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <div className="customer-shell">
       <header className="topbar">
@@ -44,13 +101,14 @@ export default function TransportPage() {
               <div key={item.name} className="card-panel room-card">
                 <div className="room-image placeholder-image" />
                 <h3>{item.name}</h3>
-                <p>{item.text}</p>
+                <p>{item.description}</p>
                 <button className="button button-secondary" type="button">
                   Book service
                 </button>
               </div>
             ))}
           </div>
+          {loading ? <p className="eyebrow">Loading travel options…</p> : null}
         </div>
       </main>
     </div>
