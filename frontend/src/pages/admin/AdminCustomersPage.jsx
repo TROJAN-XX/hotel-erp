@@ -8,7 +8,10 @@ export default function AdminCustomersPage() {
         </div>
       </div>
       <div className="card-panel padded-box">
-        <p>Profiles, travelers, tickers, reviews, and customer history appear in this section.</p>
+        <p>
+          Profiles, travelers, tickers, reviews, and customer history appear in
+          this section.
+        </p>
       </div>
     </div>
   );

@@ -8,7 +8,10 @@ export default function AdminSettingsPage() {
         </div>
       </div>
       <div className="card-panel padded-box">
-        <p>Configuration for users, permissions, pricing rules, cancellation policies and notifications lives here.</p>
+        <p>
+          Configuration for users, permissions, pricing rules, cancellation
+          policies and notifications lives here.
+        </p>
       </div>
     </div>
   );

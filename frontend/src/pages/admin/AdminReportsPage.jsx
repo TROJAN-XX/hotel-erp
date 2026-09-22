@@ -8,7 +8,10 @@ export default function AdminReportsPage() {
         </div>
       </div>
       <div className="card-panel padded-box">
-        <p>Occupancy, restaurant performance, tour revenue, wellness bookings, and overall KPIs can be tracked here.</p>
+        <p>
+          Occupancy, restaurant performance, tour revenue, wellness bookings,
+          and overall KPIs can be tracked here.
+        </p>
       </div>
     </div>
   );

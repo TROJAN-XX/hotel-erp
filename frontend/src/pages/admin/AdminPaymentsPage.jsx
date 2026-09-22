@@ -8,7 +8,10 @@ export default function AdminPaymentsPage() {
         </div>
       </div>
       <div className="card-panel padded-box">
-        <p>Transactions, pending approvals, successful payments, failed charges, and refund processing appear here.</p>
+        <p>
+          Transactions, pending approvals, successful payments, failed charges,
+          and refund processing appear here.
+        </p>
       </div>
     </div>
   );
