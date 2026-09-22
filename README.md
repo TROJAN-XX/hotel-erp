@@ -74,12 +74,19 @@ python manage.py runserver
 - Dining service foundation for future reservations and inventory-aware flows
 - Verified with Django API tests
 
-### Phase 6 - Tours and transport modules: next
+### Phase 6 - Tours and transport modules: completed
 
-- Destination and tour catalog
-- Transport service and tour booking flows
-- Vehicle and itinerary foundations
+- Destination and tour catalog APIs
+- Transport service and vehicle catalog APIs
+- Tour and transport foundation for future booking workflows
+- Verified with Django API tests
+
+### Phase 7 - Wellness and spa modules: next
+
+- Spa and massage service catalog
+- Therapist and treatment management
+- Wellness booking foundations
 
 ## Notes
 
-The project is now implemented as a Next.js frontend and Django API backend, with hotel, booking, pricing, and dining foundations validated. The next milestone is tours and transport operations.
+The project is now implemented as a Next.js frontend and Django API backend, with hotel, booking, pricing, dining, and travel foundations validated. The next milestone is wellness and spa operations.
