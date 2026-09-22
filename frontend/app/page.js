@@ -1,24 +1,5 @@
 import Link from "next/link";
-
-const featuredRooms = [
-  { name: "Deluxe Suite", label: "Garden view", price: "₹12,500 / night" },
-  {
-    name: "Heritage Villa",
-    label: "Private plunge pool",
-    price: "₹18,900 / night",
-  },
-  {
-    name: "Family Loft",
-    label: "2 adults • 2 children",
-    price: "₹15,400 / night",
-  },
-];
-
-const packages = [
-  "Kerala Weekend Escape",
-  "Wellness Retreat",
-  "Cultural Heritage Stay",
-];
+import HospitalityOverview from "../components/HospitalityOverview";
 
 export default function HomePage() {
   return (
@@ -138,84 +119,7 @@ export default function HomePage() {
             </div>
           </section>
 
-          <div className="section-header">
-            <div>
-              <span className="eyebrow">Stay</span>
-              <h2>Featured rooms</h2>
-            </div>
-            <Link href="/rooms" className="button button-primary">
-              View all
-            </Link>
-          </div>
-
-          <section className="card-grid three-up">
-            {featuredRooms.map((room) => (
-              <article key={room.name} className="card-panel room-card">
-                <div className="room-image placeholder-image" />
-                <h3>{room.name}</h3>
-                <p>{room.label}</p>
-                <div className="card-row">
-                  <strong>{room.price}</strong>
-                  <button className="button button-secondary" type="button">
-                    Book
-                  </button>
-                </div>
-              </article>
-            ))}
-          </section>
-
-          <div className="section-header">
-            <div>
-              <span className="eyebrow">Packages</span>
-              <h2>Popular getaway packages</h2>
-            </div>
-            <Link href="/packages" className="button button-primary">
-              Build custom
-            </Link>
-          </div>
-
-          <section className="package-list">
-            {packages.map((pkg) => (
-              <div key={pkg} className="list-item-row card-panel">
-                <div>
-                  <h3>{pkg}</h3>
-                  <p>
-                    Includes stay, guided experience, meals and optional
-                    add-ons.
-                  </p>
-                </div>
-                <Link href="/packages" className="button button-primary">
-                  Explore
-                </Link>
-              </div>
-            ))}
-          </section>
-
-          <div className="section-header">
-            <div>
-              <span className="eyebrow">Experiences</span>
-              <h2>Signature offering</h2>
-            </div>
-          </div>
-
-          <section className="feature-strip">
-            <div className="mini-card card-panel">
-              <strong>Dining</strong>
-              <span>Curated cuisine</span>
-            </div>
-            <div className="mini-card card-panel">
-              <strong>Tours</strong>
-              <span>Local adventures</span>
-            </div>
-            <div className="mini-card card-panel">
-              <strong>Wellness</strong>
-              <span>Spa & massage</span>
-            </div>
-            <div className="mini-card card-panel">
-              <strong>Transport</strong>
-              <span>Seamless arrivals</span>
-            </div>
-          </section>
+          <HospitalityOverview />
         </div>
       </main>
 
