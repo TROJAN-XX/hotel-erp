@@ -12,6 +12,7 @@ The repository started as an empty workspace with the project overview document 
 - Search, browse and book rooms, packages, tours, dining, wellness, and transport
 - My Trips, profile management, previous visits, and rebooking flow
 - Responsive design for desktop, tablet, and mobile devices
+- Frontend delivered in Next.js App Router for a production-ready shell
 
 ### Admin portal
 
@@ -188,19 +189,19 @@ The availability layer validates room, table, tour, spa, vehicle, and inventory 
 
 ## 10. Implementation Phases
 
-1. Project setup and scaffolding
-2. Authentication and RBAC
-3. Hotel and room foundations
-4. Booking and hotel reservation engine
-5. Restaurant and bar modules
-6. Tours and transport modules
-7. Wellness and spa modules
-8. Pricing engine and package builder
-9. Unified booking wizard and payments
-10. Real-time inventory, reschedule and refund layers
-11. Reports, notifications, and admin analytics
-12. Testing, security review, and performance tuning
+1. Project setup and scaffolding - completed
+2. Authentication and RBAC - completed
+3. Hotel and room foundations - completed
+4. Booking and hotel reservation engine - in progress
+5. Restaurant and bar modules - pending
+6. Tours and transport modules - pending
+7. Wellness and spa modules - pending
+8. Pricing engine and package builder - pending
+9. Unified booking wizard and payments - pending
+10. Real-time inventory, reschedule and refund layers - pending
+11. Reports, notifications, and admin analytics - pending
+12. Testing, security review, and performance tuning - ongoing
 
 ## 11. Current State
 
-This repository contains the project scaffolding and dummy pages for the customer and admin flows based on the overview requirements. It is ready for phase-by-phase business implementation.
+The repository is now running on a verified Next.js frontend and Django backend foundation. The hotel and room data layer is implemented and validated, with the next workstream focused on the booking engine and pricing services.

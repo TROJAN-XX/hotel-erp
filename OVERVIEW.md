@@ -137,14 +137,13 @@ mindmap
 
 ## Frontend
 
-| Technology            | Purpose             |
-| --------------------- | ------------------- |
-| Vite                  | Frontend build tool |
-| React                 | UI framework        |
-| React Router          | Routing             |
-| Axios                 | API communication   |
-| Zustand / Context API | State management    |
-| CSS / CSS Modules     | Styling             |
+| Technology            | Purpose                         |
+| --------------------- | ------------------------------- |
+| Next.js               | Frontend framework / App Router |
+| React                 | UI framework                    |
+| Axios                 | API communication               |
+| Zustand / Context API | State management                |
+| CSS / CSS Modules     | Styling                         |
 
 ## Backend
 
@@ -170,15 +169,15 @@ mindmap
 
 The architecture supports multiple payment providers:
 
-* Razorpay
-* Stripe
-* UPI
-* Cards
-* Net Banking
-* Wallets
-* Cash
-* Pay at Hotel
-* Bank Transfer
+- Razorpay
+- Stripe
+- UPI
+- Cards
+- Net Banking
+- Wallets
+- Cash
+- Pay at Hotel
+- Bank Transfer
 
 The payment architecture must remain **gateway-independent**.
 
@@ -191,7 +190,7 @@ flowchart TB
 
     Customer["👤 Customer"]
 
-    Frontend["⚛️ React + Vite\nCustomer Portal"]
+    Frontend["⚛️ Next.js + React\nCustomer Portal"]
 
     Admin["🖥️ Admin / Staff Portal"]
 
@@ -353,7 +352,7 @@ frontend/
 flowchart LR
 
     Admin["SUPER ADMIN"]
-    
+
     Hotel["HOTEL MANAGER"]
     Reception["RECEPTIONIST"]
     Housekeeping["HOUSEKEEPING"]
@@ -484,17 +483,17 @@ OUT_OF_SERVICE
 
 Features:
 
-* Table management
-* Table availability
-* Menu categories
-* Menu items
-* Pricing
-* Tax
-* Reservations
-* Orders
-* Kitchen workflow
-* Room service
-* Takeaway
+- Table management
+- Table availability
+- Menu categories
+- Menu items
+- Pricing
+- Tax
+- Reservations
+- Orders
+- Kitchen workflow
+- Room service
+- Takeaway
 
 ### Restaurant Order Lifecycle
 
@@ -516,15 +515,15 @@ stateDiagram-v2
 
 Features:
 
-* Bar tables
-* Reservations
-* Bar menu
-* Categories
-* Orders
-* Pricing
-* Taxes
-* Inventory
-* Availability
+- Bar tables
+- Reservations
+- Bar menu
+- Categories
+- Orders
+- Pricing
+- Taxes
+- Inventory
+- Availability
 
 Alcohol-related compliance rules should remain configurable according to the applicable jurisdiction.
 
@@ -534,15 +533,15 @@ Alcohol-related compliance rules should remain configurable according to the app
 
 Support:
 
-* Destinations
-* Sightseeing
-* Guided tours
-* Adventure activities
-* Cultural experiences
-* Local experiences
-* Activity schedules
-* Tour guides
-* Capacity management
+- Destinations
+- Sightseeing
+- Guided tours
+- Adventure activities
+- Cultural experiences
+- Local experiences
+- Activity schedules
+- Tour guides
+- Capacity management
 
 Each activity supports:
 
@@ -870,13 +869,13 @@ flowchart LR
 
 The customer can:
 
-* Add services
-* Remove services
-* Upgrade services
-* Change quantities
-* Assign services to individual travelers
-* View price changes immediately
-* Receive recommendations
+- Add services
+- Remove services
+- Upgrade services
+- Change quantities
+- Assign services to individual travelers
+- View price changes immediately
+- Receive recommendations
 
 Example:
 
@@ -1019,12 +1018,12 @@ Tour Overbooking
 
 Use:
 
-* Database transactions
-* `transaction.atomic()`
-* `select_for_update()`
-* Unique constraints
-* Redis locks
-* Final availability verification
+- Database transactions
+- `transaction.atomic()`
+- `select_for_update()`
+- Unique constraints
+- Redis locks
+- Final availability verification
 
 ---
 
@@ -1240,10 +1239,10 @@ PARTIALLY_REFUNDED
 
 Payment webhooks must be:
 
-* Secure
-* Signature validated
-* Idempotent
-* Transaction-safe
+- Secure
+- Signature validated
+- Idempotent
+- Transaction-safe
 
 ---
 
@@ -1354,11 +1353,11 @@ Important:
 
 The system must always recalculate current:
 
-* Prices
-* Availability
-* Taxes
-* Discounts
-* Package rules
+- Prices
+- Availability
+- Taxes
+- Discounts
+- Package rules
 
 ---
 
@@ -1481,45 +1480,45 @@ Upcoming Arrivals
 
 ## Hotel
 
-* Occupancy
-* ADR
-* Revenue
-* Room utilization
-* Check-ins
-* Check-outs
-* Cancellations
+- Occupancy
+- ADR
+- Revenue
+- Room utilization
+- Check-ins
+- Check-outs
+- Cancellations
 
 ## Restaurant
 
-* Revenue
-* Orders
-* Popular items
-* Table utilization
+- Revenue
+- Orders
+- Popular items
+- Table utilization
 
 ## Tours
 
-* Bookings
-* Capacity
-* Revenue
-* Popular activities
+- Bookings
+- Capacity
+- Revenue
+- Popular activities
 
 ## Wellness
 
-* Appointments
-* Revenue
-* Therapist utilization
-* Popular services
+- Appointments
+- Revenue
+- Therapist utilization
+- Popular services
 
 ## Overall
 
-* Gross Revenue
-* Net Revenue
-* Refunds
-* Discounts
-* Taxes
-* Bookings
-* Cancellation Rate
-* Service Utilization
+- Gross Revenue
+- Net Revenue
+- Refunds
+- Discounts
+- Taxes
+- Bookings
+- Cancellation Rate
+- Service Utilization
 
 ---
 
@@ -1599,22 +1598,22 @@ Muted Gold
 
 Design principles:
 
-* Generous whitespace
-* Elegant typography
-* High-quality imagery
-* Thin borders
-* Subtle shadows
-* Premium cards
-* Minimal animation
-* Clear hierarchy
+- Generous whitespace
+- Elegant typography
+- High-quality imagery
+- Thin borders
+- Subtle shadows
+- Premium cards
+- Minimal animation
+- Clear hierarchy
 
 Avoid:
 
-* Excessive gradients
-* Neon colors
-* Excessive animation
-* Huge rounded containers
-* Visual clutter
+- Excessive gradients
+- Neon colors
+- Excessive animation
+- Huge rounded containers
+- Visual clutter
 
 ---
 
@@ -1696,11 +1695,11 @@ Mobile
 
 Mobile booking should provide:
 
-* Large touch targets
-* Sticky booking summary
-* Bottom action bar
-* Collapsible sections
-* Mobile-friendly date/time selectors
+- Large touch targets
+- Sticky booking summary
+- Bottom action bar
+- Collapsible sections
+- Mobile-friendly date/time selectors
 
 Example:
 
@@ -1756,20 +1755,20 @@ Provide:
 
 Document:
 
-* Authentication
-* Rooms
-* Bookings
-* Packages
-* Pricing
-* Payments
-* Rescheduling
-* Cancellation
-* Refunds
-* Restaurant
-* Tours
-* Transport
-* Wellness
-* Notifications
+- Authentication
+- Rooms
+- Bookings
+- Packages
+- Pricing
+- Payments
+- Rescheduling
+- Cancellation
+- Refunds
+- Restaurant
+- Tours
+- Transport
+- Wellness
+- Notifications
 
 ---
 
@@ -1920,73 +1919,73 @@ Test the most important business rules.
 
 ## Authentication
 
-* Registration
-* Login
-* JWT
-* Refresh
-* Permissions
+- Registration
+- Login
+- JWT
+- Refresh
+- Permissions
 
 ## Hotel
 
-* Availability
-* Booking
-* Double booking
-* Check-in
-* Check-out
+- Availability
+- Booking
+- Double booking
+- Check-in
+- Check-out
 
 ## Restaurant
 
-* Table availability
-* Reservations
-* Orders
+- Table availability
+- Reservations
+- Orders
 
 ## Tours
 
-* Capacity
-* Activity booking
+- Capacity
+- Activity booking
 
 ## Wellness
 
-* Therapist conflicts
-* Appointment booking
+- Therapist conflicts
+- Appointment booking
 
 ## Pricing
 
-* Age pricing
-* Group pricing
-* Bulk discounts
-* Upgrades
-* Taxes
-* Coupons
+- Age pricing
+- Group pricing
+- Bulk discounts
+- Upgrades
+- Taxes
+- Coupons
 
 ## Booking
 
-* Inventory lock
-* Payment
-* Confirmation
-* Modification
+- Inventory lock
+- Payment
+- Confirmation
+- Modification
 
 ## Rescheduling
 
-* Higher price
-* Lower price
-* Additional payment
-* Refund difference
-* Availability
+- Higher price
+- Lower price
+- Additional payment
+- Refund difference
+- Availability
 
 ## Cancellation
 
-* Policy
-* Refund
-* Inventory release
-* Notifications
+- Policy
+- Refund
+- Inventory release
+- Notifications
 
 ## Book Again
 
-* Current availability
-* Current pricing
-* New booking number
-* Original booking remains unchanged
+- Current availability
+- Current pricing
+- New booking number
+- Original booking remains unchanged
 
 ---
 
@@ -2200,32 +2199,32 @@ flowchart LR
 
 # 📅 Phase Breakdown
 
-| Phase | Module         | Main Deliverable         |
-| ----: | -------------- | ------------------------ |
+| Phase | Module         | Main Deliverable           |
+| ----: | -------------- | -------------------------- |
 |     1 | Setup          | Next.js + Django + MariaDB |
-|     2 | Authentication | JWT + RBAC               |
-|     3 | Database       | Core models              |
-|     4 | Hotel          | Rooms + booking          |
-|     5 | Restaurant     | Tables + orders          |
-|     6 | Bar            | Reservations + orders    |
-|     7 | Tours          | Activities               |
-|     8 | Transport      | Vehicles + transfers     |
-|     9 | Wellness       | Spa + massage            |
-|    10 | Pricing        | Dynamic pricing          |
-|    11 | Packages       | Package builder          |
-|    12 | Booking        | Unified wizard           |
-|    13 | Payments       | Multiple gateways        |
-|    14 | Real-Time      | Redis + Channels         |
-|    15 | Reschedule     | Live modification        |
-|    16 | Cancellation   | Refund engine            |
-|    17 | Itinerary      | Timeline + conflicts     |
-|    18 | History        | Previous visits          |
-|    19 | Notifications  | Email/SMS/WhatsApp       |
-|    20 | Reports        | Analytics                |
-|    21 | Testing        | Automated tests          |
-|    22 | Security       | Security audit           |
-|    23 | Performance    | Optimization             |
-|    24 | Deployment     | Production setup         |
+|     2 | Authentication | JWT + RBAC                 |
+|     3 | Database       | Core models                |
+|     4 | Hotel          | Rooms + booking            |
+|     5 | Restaurant     | Tables + orders            |
+|     6 | Bar            | Reservations + orders      |
+|     7 | Tours          | Activities                 |
+|     8 | Transport      | Vehicles + transfers       |
+|     9 | Wellness       | Spa + massage              |
+|    10 | Pricing        | Dynamic pricing            |
+|    11 | Packages       | Package builder            |
+|    12 | Booking        | Unified wizard             |
+|    13 | Payments       | Multiple gateways          |
+|    14 | Real-Time      | Redis + Channels           |
+|    15 | Reschedule     | Live modification          |
+|    16 | Cancellation   | Refund engine              |
+|    17 | Itinerary      | Timeline + conflicts       |
+|    18 | History        | Previous visits            |
+|    19 | Notifications  | Email/SMS/WhatsApp         |
+|    20 | Reports        | Analytics                  |
+|    21 | Testing        | Automated tests            |
+|    22 | Security       | Security audit             |
+|    23 | Performance    | Optimization               |
+|    24 | Deployment     | Production setup           |
 
 ---
 
@@ -2483,127 +2482,127 @@ The system is complete when:
 
 ### Authentication
 
-* [ ] Registration
-* [ ] Login
-* [ ] JWT
-* [ ] Refresh token
-* [ ] RBAC
-* [ ] Permissions
+- [ ] Registration
+- [ ] Login
+- [ ] JWT
+- [ ] Refresh token
+- [ ] RBAC
+- [ ] Permissions
 
 ### Hotel
 
-* [ ] Room types
-* [ ] Rooms
-* [ ] Availability
-* [ ] Booking
-* [ ] Check-in
-* [ ] Check-out
-* [ ] Housekeeping
-* [ ] Maintenance
+- [ ] Room types
+- [ ] Rooms
+- [ ] Availability
+- [ ] Booking
+- [ ] Check-in
+- [ ] Check-out
+- [ ] Housekeeping
+- [ ] Maintenance
 
 ### Restaurant
 
-* [ ] Tables
-* [ ] Menu
-* [ ] Reservations
-* [ ] Orders
-* [ ] Kitchen
-* [ ] Room service
+- [ ] Tables
+- [ ] Menu
+- [ ] Reservations
+- [ ] Orders
+- [ ] Kitchen
+- [ ] Room service
 
 ### Bar
 
-* [ ] Tables
-* [ ] Menu
-* [ ] Reservations
-* [ ] Orders
-* [ ] Inventory
+- [ ] Tables
+- [ ] Menu
+- [ ] Reservations
+- [ ] Orders
+- [ ] Inventory
 
 ### Tours
 
-* [ ] Destinations
-* [ ] Tours
-* [ ] Activities
-* [ ] Guides
-* [ ] Capacity
+- [ ] Destinations
+- [ ] Tours
+- [ ] Activities
+- [ ] Guides
+- [ ] Capacity
 
 ### Transportation
 
-* [ ] Vehicles
-* [ ] Drivers
-* [ ] Airport transfers
-* [ ] Private vehicles
-* [ ] Rentals
+- [ ] Vehicles
+- [ ] Drivers
+- [ ] Airport transfers
+- [ ] Private vehicles
+- [ ] Rentals
 
 ### Wellness
 
-* [ ] Spa
-* [ ] Massage
-* [ ] Sauna
-* [ ] Steam
-* [ ] Therapists
-* [ ] Appointments
+- [ ] Spa
+- [ ] Massage
+- [ ] Sauna
+- [ ] Steam
+- [ ] Therapists
+- [ ] Appointments
 
 ### Packages
 
-* [ ] Dynamic package builder
-* [ ] Add-ons
-* [ ] Family plans
-* [ ] Group pricing
-* [ ] Age pricing
-* [ ] Component modifiers
+- [ ] Dynamic package builder
+- [ ] Add-ons
+- [ ] Family plans
+- [ ] Group pricing
+- [ ] Age pricing
+- [ ] Component modifiers
 
 ### Booking
 
-* [ ] Unified booking
-* [ ] Availability
-* [ ] Inventory locking
-* [ ] Payment
-* [ ] Confirmation
-* [ ] Modification
+- [ ] Unified booking
+- [ ] Availability
+- [ ] Inventory locking
+- [ ] Payment
+- [ ] Confirmation
+- [ ] Modification
 
 ### Rescheduling
 
-* [ ] Availability validation
-* [ ] Price difference
-* [ ] Additional payment
-* [ ] Refund difference
-* [ ] Inventory release
-* [ ] New inventory reservation
+- [ ] Availability validation
+- [ ] Price difference
+- [ ] Additional payment
+- [ ] Refund difference
+- [ ] Inventory release
+- [ ] New inventory reservation
 
 ### Cancellation
 
-* [ ] Cancellation policy
-* [ ] Cancellation fee
-* [ ] Refund calculation
-* [ ] Refund processing
-* [ ] Inventory release
-* [ ] Notifications
+- [ ] Cancellation policy
+- [ ] Cancellation fee
+- [ ] Refund calculation
+- [ ] Refund processing
+- [ ] Inventory release
+- [ ] Notifications
 
 ### Customer Experience
 
-* [ ] My Trips
-* [ ] Previous Visits
-* [ ] Previous Activities
-* [ ] Book Again
-* [ ] Invoices
-* [ ] Notifications
-* [ ] Reviews
+- [ ] My Trips
+- [ ] Previous Visits
+- [ ] Previous Activities
+- [ ] Book Again
+- [ ] Invoices
+- [ ] Notifications
+- [ ] Reviews
 
 ### Itinerary
 
-* [ ] Timeline
-* [ ] Conflict detection
-* [ ] Alternative time suggestions
+- [ ] Timeline
+- [ ] Conflict detection
+- [ ] Alternative time suggestions
 
 ### Admin
 
-* [ ] Dashboard
-* [ ] Analytics
-* [ ] Reports
-* [ ] Staff
-* [ ] Permissions
-* [ ] Audit logs
-* [ ] Settings
+- [ ] Dashboard
+- [ ] Analytics
+- [ ] Reports
+- [ ] Staff
+- [ ] Permissions
+- [ ] Audit logs
+- [ ] Settings
 
 ---
 
@@ -2708,23 +2707,23 @@ Next phase
 
 Do not:
 
-* Put all Django logic inside views
-* Put all React state into one global store
-* Hard-code pricing
-* Hard-code cancellation rules
-* Trust frontend pricing
-* Trust frontend availability
-* Store secrets in Git
-* Duplicate business logic
-* Create unnecessary Django apps
-* Create unnecessary abstractions
-* Use mock APIs in production flows
-* Ignore database transactions
-* Ignore concurrency
-* Ignore failed payments
-* Ignore webhook duplication
-* Delete important historical booking records
-* Reuse historical prices during Book Again
+- Put all Django logic inside views
+- Put all React state into one global store
+- Hard-code pricing
+- Hard-code cancellation rules
+- Trust frontend pricing
+- Trust frontend availability
+- Store secrets in Git
+- Duplicate business logic
+- Create unnecessary Django apps
+- Create unnecessary abstractions
+- Use mock APIs in production flows
+- Ignore database transactions
+- Ignore concurrency
+- Ignore failed payments
+- Ignore webhook duplication
+- Delete important historical booking records
+- Reuse historical prices during Book Again
 
 ---
 
