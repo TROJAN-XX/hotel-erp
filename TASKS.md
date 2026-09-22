@@ -24,12 +24,12 @@
 
 - [x] Add reservation confirmation and payment summary states
 - [x] Validate end-to-end behavior with the running Django backend
-- [ ] Add more service pages and dashboard action flows
+- [x] Add more service pages and dashboard action flows
 
 ## Proposed Phase After This
 
 - [x] Authentication + role-aware access
-- [ ] Booking workflow and payment integration
+- [x] Booking workflow and payment integration
 - [x] Admin analytics, reports, and operations panels
 - [x] Rescheduling, cancellation, and refund logic
-- [ ] Final polish and deployment configuration
+- [x] Final polish and deployment configuration

@@ -23,6 +23,7 @@ This repository contains a full-service hospitality platform for hotel operation
 
 ```bash
 cd frontend
+cp .env.example .env.local
 npm install
 npm run dev
 ```
@@ -34,9 +35,16 @@ cd backend
 python -m venv .venv
 .venv\Scripts\activate  # Linux/macOS: source .venv/bin/activate
 pip install -r requirements.txt
+cp .env.example .env
 python manage.py migrate
-python manage.py runserver
+python manage.py runserver 0.0.0.0:8000
 ```
+
+### Deployment notes
+
+- Keep your local frontend env in `frontend/.env.local` and the backend env in `backend/.env` or the repo root `.env`.
+- For production deployment, set `NEXT_PUBLIC_API_BASE_URL` to your live Django API origin and configure `CORS_ALLOWED_ORIGINS` on the backend to include the frontend domain.
+- The Django project loads environment variables from the repo root `.env` and the backend directory `.env`, which makes it safe to switch between local and hosted environments.
 
 ## Phase status
 

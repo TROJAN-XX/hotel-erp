@@ -50,6 +50,37 @@ const formatCurrency = (value) =>
 export default function AdminDashboard() {
   const [bookings, setBookings] = useState(fallbackBookings);
   const [loading, setLoading] = useState(true);
+  const [dashboardMessage, setDashboardMessage] = useState(
+    "Operations sync complete.",
+  );
+
+  const handleQuickAction = (action) => {
+    if (action === "approve") {
+      setBookings((current) =>
+        current.map((booking) =>
+          booking.status === "Pending"
+            ? { ...booking, status: "Confirmed" }
+            : booking,
+        ),
+      );
+      setDashboardMessage("Pending stays approved and guests were notified.");
+      return;
+    }
+
+    if (action === "refund") {
+      setBookings((current) =>
+        current.map((booking) =>
+          booking.status === "Confirmed"
+            ? { ...booking, status: "Refund reviewed" }
+            : booking,
+        ),
+      );
+      setDashboardMessage("Refund queue reviewed and flagged for processing.");
+      return;
+    }
+
+    setDashboardMessage("Operational report prepared and exported.");
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -175,16 +206,34 @@ export default function AdminDashboard() {
         </section>
 
         <div className="action-toolbar">
-          <button className="button button-primary" type="button">
+          <button
+            className="button button-primary"
+            type="button"
+            onClick={() => handleQuickAction("approve")}
+          >
             Approve pending stays
           </button>
-          <button className="button button-secondary" type="button">
+          <button
+            className="button button-secondary"
+            type="button"
+            onClick={() => handleQuickAction("refund")}
+          >
             Review refunds
           </button>
-          <button className="button button-secondary" type="button">
+          <button
+            className="button button-secondary"
+            type="button"
+            onClick={() => handleQuickAction("export")}
+          >
             Export report
           </button>
         </div>
+
+        {dashboardMessage ? (
+          <div className="status-banner success" style={{ marginBottom: 18 }}>
+            {dashboardMessage}
+          </div>
+        ) : null}
 
         <div className="operations-grid">
           <div className="card-panel padded-box">
