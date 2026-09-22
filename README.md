@@ -53,12 +53,26 @@ python manage.py runserver
 - Hotel and room listing API endpoints
 - Verified with Django API tests
 
-### Phase 3 - Booking and pricing engine: next
+### Phase 3 - Booking and reservation engine: completed
 
 - Reservation workflow
-- Availability checks
-- Pricing rules and dynamic package pricing
+- Booking and guest record creation
+- Hotel room booking API flow
+- Verified with Django API tests
+
+### Phase 4 - Pricing and package engine: completed
+
+- Dynamic pricing rules
+- Package catalog with pricing metadata
+- Rule list/detail API endpoints
+- Verified with Django API tests
+
+### Phase 5 - Restaurant and bar modules: next
+
+- Restaurant menu and reservations
+- Bar management and service orders
+- Inventory-aware dining flows
 
 ## Notes
 
-The project is now implemented as a Next.js frontend and Django API backend, with the core hotel domain foundation active and ready for the next booking and pricing phase.
+The project is now implemented as a Next.js frontend and Django API backend, with booking and pricing foundations validated. The next milestone is restaurant and bar operations.
