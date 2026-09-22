@@ -1,3 +1,7 @@
 from django.urls import path
 
-urlpatterns = []
+from .views import GuestReviewListView
+
+urlpatterns = [
+    path("", GuestReviewListView.as_view(), name="review-list"),
+]

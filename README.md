@@ -109,6 +109,13 @@ python manage.py runserver
 - Operational inventory support for housekeeping and service operations
 - Verified with Django API tests
 
+### Phase 11 - Coupon, review, and audit operations: completed
+
+- Coupon catalog and discount rule management
+- Guest review aggregation and approval flow
+- Audit trail tracking for critical operational actions
+- Verified with Django API tests
+
 ## Notes
 
-The project is now implemented as a Next.js frontend and Django API backend, with hotel, booking, pricing, dining, travel, wellness, payment, reporting, notification, and inventory foundations validated. The next milestone is full admin dashboard and advanced operational tooling.
+The project is now implemented as a Next.js frontend and Django API backend, with hotel, booking, pricing, dining, travel, wellness, payment, reporting, notification, inventory, and operational governance foundations validated. The next milestone is full admin dashboard and advanced operational intelligence tooling.

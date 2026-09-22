@@ -1,3 +1,7 @@
 from django.urls import path
 
-urlpatterns = []
+from .views import CouponListView
+
+urlpatterns = [
+    path("", CouponListView.as_view(), name="coupon-list"),
+]
