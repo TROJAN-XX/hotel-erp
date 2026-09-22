@@ -2202,7 +2202,7 @@ flowchart LR
 
 | Phase | Module         | Main Deliverable         |
 | ----: | -------------- | ------------------------ |
-|     1 | Setup          | React + Django + MariaDB |
+|     1 | Setup          | Next.js + Django + MariaDB |
 |     2 | Authentication | JWT + RBAC               |
 |     3 | Database       | Core models              |
 |     4 | Hotel          | Rooms + booking          |
