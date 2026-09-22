@@ -1,17 +1,8 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/admin/page": "app/admin/page.js",
-  "/booking/page": "app/booking/page.js",
-  "/login/page": "app/login/page.js",
-  "/packages/page": "app/packages/page.js",
-  "/page": "app/page.js",
-  "/profile/page": "app/profile/page.js",
-  "/payment/page": "app/payment/page.js",
-  "/register/page": "app/register/page.js",
-  "/restaurants/page": "app/restaurants/page.js",
   "/rooms/page": "app/rooms/page.js",
+  "/packages/page": "app/packages/page.js",
+  "/admin/page": "app/admin/page.js",
   "/tours/page": "app/tours/page.js",
-  "/transport/page": "app/transport/page.js",
-  "/trips/page": "app/trips/page.js",
-  "/wellness/page": "app/wellness/page.js"
+  "/login/page": "app/login/page.js",
+  "/register/page": "app/register/page.js"
 }
