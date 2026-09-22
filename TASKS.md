@@ -30,6 +30,6 @@
 
 - [x] Authentication + role-aware access
 - [ ] Booking workflow and payment integration
-- [ ] Admin analytics, reports, and operations panels
-- [ ] Rescheduling, cancellation, and refund logic
+- [x] Admin analytics, reports, and operations panels
+- [x] Rescheduling, cancellation, and refund logic
 - [ ] Final polish and deployment configuration

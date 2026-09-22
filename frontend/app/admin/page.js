@@ -19,7 +19,8 @@ export default function AdminDashboardPage() {
           <span className="eyebrow">Restricted access</span>
           <h1>Admin access required</h1>
           <p>
-            This dashboard is only available to verified staff and administrators.
+            This dashboard is only available to verified staff and
+            administrators.
           </p>
           <div className="hero-actions" style={{ marginTop: 20 }}>
             <Link href="/login" className="button button-primary">

@@ -35,7 +35,9 @@ export default function LoginPage() {
     };
 
     saveUser(user);
-    setStatus(role === "admin" ? "Admin login successful." : "Login successful.");
+    setStatus(
+      role === "admin" ? "Admin login successful." : "Login successful.",
+    );
     router.push(role === "admin" ? "/admin" : "/profile");
   };
 

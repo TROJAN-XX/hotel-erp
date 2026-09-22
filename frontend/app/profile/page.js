@@ -25,7 +25,9 @@ export default function ProfilePage() {
         <div className="auth-card">
           <span className="eyebrow">Member access</span>
           <h1>Sign in to view your profile</h1>
-          <p>Please log in to see your bookings, loyalty status, and preferences.</p>
+          <p>
+            Please log in to see your bookings, loyalty status, and preferences.
+          </p>
           <div className="hero-actions" style={{ marginTop: 20 }}>
             <Link href="/login" className="button button-primary">
               Login
@@ -77,7 +79,11 @@ export default function ProfilePage() {
               <button className="button button-primary" type="button">
                 Edit profile
               </button>
-              <button className="button button-secondary" type="button" onClick={handleLogout}>
+              <button
+                className="button button-secondary"
+                type="button"
+                onClick={handleLogout}
+              >
                 Logout
               </button>
             </div>
@@ -85,7 +91,11 @@ export default function ProfilePage() {
           <div className="card-panel padded-box">
             <span className="eyebrow">Loyalty</span>
             <h2>{loyaltyLabel}</h2>
-            <p>{user.role === "admin" ? "Operations access enabled" : "4 upcoming stays • 12 reward points"}</p>
+            <p>
+              {user.role === "admin"
+                ? "Operations access enabled"
+                : "4 upcoming stays • 12 reward points"}
+            </p>
             <div className="action-row">
               {user.role === "admin" ? (
                 <Link href="/admin" className="button button-primary">

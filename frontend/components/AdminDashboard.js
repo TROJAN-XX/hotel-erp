@@ -33,6 +33,13 @@ const fallbackBookings = [
   },
 ];
 
+const serviceMix = [
+  { label: "Room nights", value: 42, color: "var(--gold)" },
+  { label: "Dining", value: 31, color: "#d9c7a1" },
+  { label: "Spa", value: 18, color: "#b8bcbf" },
+  { label: "Tours", value: 9, color: "#d9d7d1" },
+];
+
 const formatCurrency = (value) =>
   new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -113,6 +120,10 @@ export default function AdminDashboard() {
   const checkedIn = bookings.filter((booking) =>
     ["Checked in", "Confirmed", "In Progress"].includes(booking.status),
   ).length;
+  const pendingApprovals = bookings.filter(
+    (booking) => booking.status === "Pending",
+  ).length;
+  const refundEstimate = Math.round(revenue * 0.07);
 
   return (
     <div className="admin-shell">
@@ -162,6 +173,70 @@ export default function AdminDashboard() {
             <strong>{checkedIn}</strong>
           </div>
         </section>
+
+        <div className="action-toolbar">
+          <button className="button button-primary" type="button">
+            Approve pending stays
+          </button>
+          <button className="button button-secondary" type="button">
+            Review refunds
+          </button>
+          <button className="button button-secondary" type="button">
+            Export report
+          </button>
+        </div>
+
+        <div className="operations-grid">
+          <div className="card-panel padded-box">
+            <span className="eyebrow">Service mix</span>
+            <h3>Demand distribution</h3>
+            <div className="mini-metric-list">
+              {serviceMix.map((item) => (
+                <div className="metric-row" key={item.label}>
+                  <span>{item.label}</span>
+                  <div className="metric-bar">
+                    <span
+                      style={{
+                        width: `${item.value}%`,
+                        background: item.color,
+                      }}
+                    />
+                  </div>
+                  <strong>{item.value}%</strong>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="card-panel padded-box">
+            <span className="eyebrow">Cashflow</span>
+            <h3>Pending payments</h3>
+            <div className="mini-metric-list">
+              <div className="metric-row">
+                <span>Approvals</span>
+                <strong>{pendingApprovals}</strong>
+              </div>
+              <div className="metric-row">
+                <span>Refund reserve</span>
+                <strong>{formatCurrency(refundEstimate)}</strong>
+              </div>
+              <div className="metric-row">
+                <span>Outstanding</span>
+                <strong>{formatCurrency(revenue * 0.21)}</strong>
+              </div>
+            </div>
+          </div>
+
+          <div className="card-panel padded-box">
+            <span className="eyebrow">Alerts</span>
+            <h3>Operational notes</h3>
+            <ul className="alert-list">
+              <li>Housekeeping roster is 96% staffed.</li>
+              <li>2 VIP arrivals need concierge preparation.</li>
+              <li>Restaurant inventory for breakfast is trending low.</li>
+            </ul>
+          </div>
+        </div>
 
         <div className="chart-grid">
           <div className="card-panel chart-panel">
