@@ -28,7 +28,7 @@
 
 ## Proposed Phase After This
 
-- [ ] Authentication + role-aware access
+- [x] Authentication + role-aware access
 - [ ] Booking workflow and payment integration
 - [ ] Admin analytics, reports, and operations panels
 - [ ] Rescheduling, cancellation, and refund logic
