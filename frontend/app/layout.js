@@ -1,8 +1,8 @@
-import './globals.css';
+import "./globals.css";
 
 export const metadata = {
-  title: 'Asteria Hotel ERP',
-  description: 'Luxury hospitality management platform',
+  title: "Asteria Hotel ERP",
+  description: "Luxury hospitality management platform",
 };
 
 export default function RootLayout({ children }) {

@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function LoginPage() {
   return (
@@ -15,9 +15,11 @@ export default function LoginPage() {
             Password
             <input type="password" placeholder="••••••••" />
           </label>
-          <button className="button button-primary full-width" type="submit">Login</button>
+          <button className="button button-primary full-width" type="submit">
+            Login
+          </button>
         </form>
-        <p style={{ marginTop: 16, textAlign: 'center' }}>
+        <p style={{ marginTop: 16, textAlign: "center" }}>
           Don&apos;t have an account? <Link href="/register">Create one</Link>
         </p>
       </div>
