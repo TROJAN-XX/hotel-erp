@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { fetchApi, normalizeListResponse } from "../lib/api";
 
 const menu = [
-  "Dashboard",
-  "Bookings",
-  "Rooms",
-  "Payments",
-  "Reports",
-  "Settings",
+  { label: "Dashboard", href: "/admin" },
+  { label: "Bookings", href: "/booking" },
+  { label: "Rooms", href: "/rooms" },
+  { label: "Payments", href: "/payment" },
+  { label: "Inventory", href: "/inventory" },
+  { label: "Staff", href: "/staff" },
+  { label: "Reports", href: "/reports" },
+  { label: "Notifications", href: "/notifications" },
 ];
 
 const fallbackBookings = [
@@ -168,8 +170,8 @@ export default function AdminDashboard() {
         </div>
         <nav className="sidebar-nav" aria-label="Sidebar">
           {menu.map((item) => (
-            <a key={item} href="/admin" className="sidebar-link">
-              {item}
+            <a key={item.label} href={item.href} className="sidebar-link">
+              {item.label}
             </a>
           ))}
         </nav>

@@ -25,6 +25,9 @@
 - [x] Add reservation confirmation and payment summary states
 - [x] Validate end-to-end behavior with the running Django backend
 - [x] Add more service pages and dashboard action flows
+- [x] Create executive reports and operational notifications center
+- [x] Add inventory and operational control monitoring
+- [x] Add staff and permission operations management
 
 ## Proposed Phase After This
 
