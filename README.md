@@ -67,12 +67,19 @@ python manage.py runserver
 - Rule list/detail API endpoints
 - Verified with Django API tests
 
-### Phase 5 - Restaurant and bar modules: next
+### Phase 5 - Restaurant and bar modules: completed
 
-- Restaurant menu and reservations
-- Bar management and service orders
-- Inventory-aware dining flows
+- Restaurant table and menu catalog APIs
+- Bar table and bar menu catalog APIs
+- Dining service foundation for future reservations and inventory-aware flows
+- Verified with Django API tests
+
+### Phase 6 - Tours and transport modules: next
+
+- Destination and tour catalog
+- Transport service and tour booking flows
+- Vehicle and itinerary foundations
 
 ## Notes
 
-The project is now implemented as a Next.js frontend and Django API backend, with booking and pricing foundations validated. The next milestone is restaurant and bar operations.
+The project is now implemented as a Next.js frontend and Django API backend, with hotel, booking, pricing, and dining foundations validated. The next milestone is tours and transport operations.
