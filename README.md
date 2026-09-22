@@ -102,6 +102,13 @@ python manage.py runserver
 - Operational reporting data model for future dashboards
 - Verified with Django API tests
 
+### Phase 10 - Inventory and operational controls: completed
+
+- Inventory item stock tracking and reorder foundations
+- Stock movement histories for inbound, outbound, and adjustments
+- Operational inventory support for housekeeping and service operations
+- Verified with Django API tests
+
 ## Notes
 
-The project is now implemented as a Next.js frontend and Django API backend, with hotel, booking, pricing, dining, travel, wellness, payment, reporting, and notification foundations validated. The next milestone is full admin dashboard and advanced operational tooling.
+The project is now implemented as a Next.js frontend and Django API backend, with hotel, booking, pricing, dining, travel, wellness, payment, reporting, notification, and inventory foundations validated. The next milestone is full admin dashboard and advanced operational tooling.
