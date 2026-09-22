@@ -95,6 +95,13 @@ python manage.py runserver
 - Gateway-ready payment data model
 - Verified with Django API tests
 
+### Phase 9 - Reporting and notifications: completed
+
+- Notification log and channel tracking
+- Sales report generation foundation
+- Operational reporting data model for future dashboards
+- Verified with Django API tests
+
 ## Notes
 
-The project is now implemented as a Next.js frontend and Django API backend, with hotel, booking, pricing, dining, travel, wellness, and payment foundations validated. The next milestone is operational reporting and notification flows.
+The project is now implemented as a Next.js frontend and Django API backend, with hotel, booking, pricing, dining, travel, wellness, payment, reporting, and notification foundations validated. The next milestone is full admin dashboard and advanced operational tooling.
