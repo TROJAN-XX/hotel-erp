@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { fetchApi, normalizeListResponse } from "../../lib/api";
+import { API_BASE_URL, fetchApi, normalizeListResponse } from "../../lib/api";
 
 const fallbackInventory = [
   {
@@ -49,6 +49,104 @@ export default function InventoryPage() {
   const [inventoryItems, setInventoryItems] = useState(fallbackInventory);
   const [movementLog, setMovementLog] = useState(fallbackMovements);
   const [loading, setLoading] = useState(true);
+  const [adjustment, setAdjustment] = useState({
+    itemId: "",
+    movementType: "inbound",
+    quantity: 10,
+    reference: "",
+    notes: "",
+  });
+  const [statusMessage, setStatusMessage] = useState("");
+
+  useEffect(() => {
+    if (!adjustment.itemId && inventoryItems.length) {
+      setAdjustment((current) => ({
+        ...current,
+        itemId: String(inventoryItems[0].id),
+      }));
+    }
+  }, [adjustment.itemId, inventoryItems]);
+
+  const handleStockAdjustment = async (event) => {
+    event.preventDefault();
+    const selectedItem = inventoryItems.find(
+      (item) => String(item.id) === String(adjustment.itemId),
+    );
+
+    if (!selectedItem) {
+      setStatusMessage("Choose an item before updating stock.");
+      return;
+    }
+
+    const quantity = Number(adjustment.quantity || 0);
+    if (!quantity) {
+      setStatusMessage("Enter a stock quantity greater than zero.");
+      return;
+    }
+
+    const signedQuantity =
+      adjustment.movementType === "outbound"
+        ? -Math.abs(quantity)
+        : Math.abs(quantity);
+    const nextStock =
+      adjustment.movementType === "outbound"
+        ? Math.max(
+            0,
+            Number(selectedItem.current_stock || 0) - Math.abs(quantity),
+          )
+        : Number(selectedItem.current_stock || 0) + Math.abs(quantity);
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/inventory/items/${selectedItem.id}/`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            current_stock: nextStock,
+            movement_type: adjustment.movementType,
+            quantity: signedQuantity,
+            reference: adjustment.reference || `Manual-${Date.now()}`,
+            notes:
+              adjustment.notes || "Inventory adjustment from admin console",
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Inventory update failed.");
+      }
+
+      const updatedItem = await response.json();
+      setInventoryItems((current) =>
+        current.map((item) =>
+          String(item.id) === String(updatedItem.id) ? updatedItem : item,
+        ),
+      );
+      setMovementLog((current) =>
+        [
+          {
+            item: selectedItem.name,
+            quantity: signedQuantity,
+            movement_type: adjustment.movementType,
+          },
+          ...current,
+        ].slice(0, 4),
+      );
+      setStatusMessage(`${selectedItem.name} adjusted successfully.`);
+      setAdjustment((current) => ({
+        ...current,
+        quantity: 10,
+        reference: "",
+        notes: "",
+      }));
+    } catch (error) {
+      setStatusMessage(error.message || "The inventory adjustment failed.");
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -233,6 +331,100 @@ export default function InventoryPage() {
             <div className="card-panel padded-box">
               <span className="eyebrow">Movement</span>
               <h3>Daily adjustments</h3>
+              <form onSubmit={handleStockAdjustment} style={{ marginTop: 18 }}>
+                <div style={{ display: "grid", gap: 12 }}>
+                  <select
+                    value={adjustment.itemId || inventoryItems[0]?.id || ""}
+                    onChange={(event) =>
+                      setAdjustment((current) => ({
+                        ...current,
+                        itemId: event.target.value,
+                      }))
+                    }
+                    style={{ padding: 10, borderRadius: 8 }}
+                  >
+                    {inventoryItems.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      gap: 12,
+                    }}
+                  >
+                    <select
+                      value={adjustment.movementType}
+                      onChange={(event) =>
+                        setAdjustment((current) => ({
+                          ...current,
+                          movementType: event.target.value,
+                        }))
+                      }
+                      style={{ padding: 10, borderRadius: 8 }}
+                    >
+                      <option value="inbound">Inbound</option>
+                      <option value="outbound">Outbound</option>
+                      <option value="adjustment">Adjustment</option>
+                    </select>
+
+                    <input
+                      type="number"
+                      min="1"
+                      value={adjustment.quantity}
+                      onChange={(event) =>
+                        setAdjustment((current) => ({
+                          ...current,
+                          quantity: event.target.value,
+                        }))
+                      }
+                      placeholder="Quantity"
+                      style={{ padding: 10, borderRadius: 8 }}
+                    />
+                  </div>
+
+                  <input
+                    type="text"
+                    value={adjustment.reference}
+                    onChange={(event) =>
+                      setAdjustment((current) => ({
+                        ...current,
+                        reference: event.target.value,
+                      }))
+                    }
+                    placeholder="Reference"
+                    style={{ padding: 10, borderRadius: 8 }}
+                  />
+
+                  <input
+                    type="text"
+                    value={adjustment.notes}
+                    onChange={(event) =>
+                      setAdjustment((current) => ({
+                        ...current,
+                        notes: event.target.value,
+                      }))
+                    }
+                    placeholder="Notes"
+                    style={{ padding: 10, borderRadius: 8 }}
+                  />
+
+                  <button type="submit" className="button button-primary">
+                    Apply adjustment
+                  </button>
+                </div>
+              </form>
+
+              {statusMessage ? (
+                <p className="eyebrow" style={{ marginTop: 12 }}>
+                  {statusMessage}
+                </p>
+              ) : null}
+
               <ul className="alert-list" style={{ marginTop: 18 }}>
                 {movementRows.map((entry) => (
                   <li key={entry.label}>

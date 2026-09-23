@@ -16,7 +16,7 @@ class Command(BaseCommand):
     help = "Seed the platform with realistic demo hospitality data for admin dashboards and operations pages."
 
     def handle(self, *args, **options):
-        hotel, _ = Hotel.objects.get_or_create(
+        hotel, created = Hotel.objects.get_or_create(
             slug="asteria-residency",
             defaults={
                 "name": "Asteria Residency",
@@ -32,9 +32,9 @@ class Command(BaseCommand):
         )
 
         room_type, _ = RoomType.objects.get_or_create(
-            hotel=hotel,
-            slug="deluxe-suite",
+            slug="asteria-deluxe-suite",
             defaults={
+                "hotel": hotel,
                 "name": "Deluxe Suite",
                 "room_size_sqft": 620,
                 "max_guests": 3,
@@ -45,6 +45,10 @@ class Command(BaseCommand):
                 "is_active": True,
             },
         )
+
+        if not room_type.hotel_id:
+            room_type.hotel = hotel
+            room_type.save(update_fields=["hotel"])
 
         for room_number in [101, 102, 203, 204, 305]:
             Room.objects.get_or_create(

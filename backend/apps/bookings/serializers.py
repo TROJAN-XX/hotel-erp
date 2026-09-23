@@ -43,7 +43,7 @@ class BookingSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
-        read_only_fields = ["user", "status", "nights", "items", "created_at", "updated_at"]
+        read_only_fields = ["user", "nights", "items", "created_at", "updated_at"]
 
     def create(self, validated_data):
         booking = Booking.objects.create(**validated_data)

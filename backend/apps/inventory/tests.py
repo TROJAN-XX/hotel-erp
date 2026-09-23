@@ -37,3 +37,17 @@ class InventoryAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertGreaterEqual(response.data["count"], 1)
         self.assertIn("results", response.data)
+
+    def test_inventory_item_adjustment_updates_stock_and_records_movement(self):
+        item = InventoryItem.objects.first()
+
+        response = self.client.patch(
+            reverse("inventory-item-detail", args=[item.id]),
+            {"current_stock": 160, "movement_type": "inbound", "quantity": 40, "reference": "PO-2002", "notes": "Margin restock"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        item.refresh_from_db()
+        self.assertEqual(item.current_stock, 160)
+        self.assertTrue(StockMovement.objects.filter(reference="PO-2002").exists())

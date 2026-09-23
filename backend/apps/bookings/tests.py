@@ -1,9 +1,13 @@
 from django.contrib.auth import get_user_model
+from django.core.management import call_command
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from apps.hotels.models import Hotel
+from apps.inventory.models import InventoryItem, StockMovement
+from apps.notifications.models import NotificationLog
+from apps.reports.models import SalesReport
 from apps.rooms.models import RoomType
 
 from .models import Booking
@@ -86,3 +90,39 @@ class BookingAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertGreaterEqual(response.data["count"], 1)
         self.assertIn("results", response.data)
+
+    def test_booking_status_patch_updates_admin_flow(self):
+        booking = Booking.objects.create(
+            hotel=self.hotel,
+            room_type=self.room_type,
+            guest_name="Priya Shah",
+            guest_phone="+919988776655",
+            user=self.user,
+            check_in="2026-11-18",
+            check_out="2026-11-20",
+            adults=2,
+            children=0,
+            total_amount=14000,
+            currency="INR",
+            status="pending",
+        )
+
+        response = self.client.patch(
+            reverse("booking-detail", args=[booking.id]),
+            {"status": "confirmed"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        booking.refresh_from_db()
+        self.assertEqual(booking.status, "confirmed")
+        self.assertEqual(response.data["status"], "confirmed")
+
+    def test_seed_demo_data_populates_admin_dashboard_records(self):
+        call_command("seed_demo_data")
+
+        self.assertTrue(Booking.objects.exists())
+        self.assertTrue(InventoryItem.objects.exists())
+        self.assertTrue(StockMovement.objects.exists())
+        self.assertTrue(NotificationLog.objects.exists())
+        self.assertTrue(SalesReport.objects.exists())

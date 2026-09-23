@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchApi, normalizeListResponse } from "../lib/api";
+import { API_BASE_URL, fetchApi, normalizeListResponse } from "../lib/api";
 
 const menu = [
   { label: "Dashboard", href: "/admin" },
@@ -35,6 +35,12 @@ const fallbackBookings = [
   },
 ];
 
+const fallbackAlerts = [
+  "Housekeeping roster is 96% staffed.",
+  "2 VIP arrivals need concierge preparation.",
+  "Restaurant inventory for breakfast is trending low.",
+];
+
 const serviceMix = [
   { label: "Room nights", value: 42, color: "var(--gold)" },
   { label: "Dining", value: 31, color: "#d9c7a1" },
@@ -49,15 +55,78 @@ const formatCurrency = (value) =>
     maximumFractionDigits: 0,
   }).format(Number(value || 0));
 
+const normalizeBookingStatus = (status) => {
+  if (!status) return "Pending";
+  const statusMap = {
+    pending: "Pending",
+    confirmed: "Confirmed",
+    checked_in: "Checked in",
+    completed: "Completed",
+    cancelled: "Cancelled",
+    "In Progress": "In Progress",
+  };
+  return statusMap[status] || status;
+};
+
 export default function AdminDashboard() {
   const [bookings, setBookings] = useState(fallbackBookings);
+  const [inventoryItems, setInventoryItems] = useState([]);
+  const [alerts, setAlerts] = useState(fallbackAlerts);
   const [loading, setLoading] = useState(true);
   const [dashboardMessage, setDashboardMessage] = useState(
     "Operations sync complete.",
   );
 
-  const handleQuickAction = (action) => {
+  const updateBookingStatus = async (bookingId, nextStatus) => {
+    if (!bookingId) {
+      return false;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/bookings/${bookingId}/`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ status: nextStatus }),
+      });
+
+      if (!response.ok) {
+        return false;
+      }
+
+      const updatedBooking = await response.json();
+      setBookings((current) =>
+        current.map((booking) =>
+          booking.id === bookingId
+            ? {
+                ...booking,
+                status: normalizeBookingStatus(updatedBooking.status),
+              }
+            : booking,
+        ),
+      );
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const handleQuickAction = async (action) => {
     if (action === "approve") {
+      const pendingBooking = bookings.find(
+        (booking) => booking.status === "Pending",
+      );
+      const approved = pendingBooking?.id
+        ? await updateBookingStatus(pendingBooking.id, "confirmed")
+        : false;
+
+      if (approved) {
+        setDashboardMessage("Pending stays approved and guests were notified.");
+        return;
+      }
+
       setBookings((current) =>
         current.map((booking) =>
           booking.status === "Pending"
@@ -70,6 +139,20 @@ export default function AdminDashboard() {
     }
 
     if (action === "refund") {
+      const confirmedBooking = bookings.find(
+        (booking) => booking.status === "Confirmed",
+      );
+      const refunded = confirmedBooking?.id
+        ? await updateBookingStatus(confirmedBooking.id, "cancelled")
+        : false;
+
+      if (refunded) {
+        setDashboardMessage(
+          "Refund queue reviewed and flagged for processing.",
+        );
+        return;
+      }
+
       setBookings((current) =>
         current.map((booking) =>
           booking.status === "Confirmed"
@@ -89,9 +172,18 @@ export default function AdminDashboard() {
 
     async function loadDashboardData() {
       try {
-        const [bookingResponse, hotelResponse] = await Promise.allSettled([
+        const [
+          bookingResponse,
+          hotelResponse,
+          inventoryResponse,
+          notificationResponse,
+          reportResponse,
+        ] = await Promise.allSettled([
           fetchApi("/bookings/"),
           fetchApi("/hotels/"),
+          fetchApi("/inventory/items/"),
+          fetchApi("/notifications/logs/"),
+          fetchApi("/reports/sales/"),
         ]);
 
         if (!isMounted) return;
@@ -102,33 +194,78 @@ export default function AdminDashboard() {
         const hotelList = normalizeListResponse(
           hotelResponse.status === "fulfilled" ? hotelResponse.value : [],
         );
+        const inventoryList = normalizeListResponse(
+          inventoryResponse.status === "fulfilled"
+            ? inventoryResponse.value
+            : [],
+        );
+        const notificationList = normalizeListResponse(
+          notificationResponse.status === "fulfilled"
+            ? notificationResponse.value
+            : [],
+        );
+        const reportList = normalizeListResponse(
+          reportResponse.status === "fulfilled" ? reportResponse.value : [],
+        );
 
         const liveBookings =
           bookingList.length > 0
             ? bookingList.map((booking) => ({
+                id: booking.id,
                 guest_name: booking.guest_name || "Guest",
                 nights: Number(booking.nights || 1),
                 total_amount: Number(booking.total_amount || 0),
-                status: booking.status || "Pending",
+                status: normalizeBookingStatus(booking.status),
               }))
-            : fallbackBookings;
+            : fallbackBookings.map((booking, index) => ({
+                id: index + 1,
+                ...booking,
+              }));
 
         setBookings(liveBookings);
 
         if (hotelList.length > 0 && !bookingList.length) {
           setBookings([
             {
+              id: "hotel-sync",
               guest_name: "Live hotel data",
               nights: 2,
               total_amount: hotelList.length * 15000,
               status: "Synced",
             },
-            ...fallbackBookings.slice(0, 2),
+            ...fallbackBookings.slice(0, 2).map((booking, index) => ({
+              id: `fallback-${index + 1}`,
+              ...booking,
+            })),
           ]);
+        }
+
+        setInventoryItems(inventoryList.length ? inventoryList : []);
+        const alertMessages = notificationList.length
+          ? notificationList
+              .slice(0, 3)
+              .map(
+                (entry) =>
+                  entry.subject || entry.message || "Operational update",
+              )
+          : fallbackAlerts;
+        setAlerts(alertMessages);
+
+        if (reportList.length > 0) {
+          const reportRevenue = reportList.reduce(
+            (sum, report) => sum + Number(report.total_revenue || 0),
+            0,
+          );
+          if (reportRevenue > 0) {
+            setDashboardMessage(
+              `Sales summary synced: ${formatCurrency(reportRevenue)} across ${reportList.length} report snapshots.`,
+            );
+          }
         }
       } catch (error) {
         if (isMounted) {
           setBookings(fallbackBookings);
+          setAlerts(fallbackAlerts);
         }
       } finally {
         if (isMounted) {
@@ -148,6 +285,10 @@ export default function AdminDashboard() {
     (sum, booking) => sum + Number(booking.total_amount || 0),
     0,
   );
+  const lowStockItems = inventoryItems.filter(
+    (item) =>
+      Number(item.current_stock || 0) <= Number(item.reorder_level || 0),
+  ).length;
   const reservations = bookings.length;
   const occupancy = reservations ? Math.min(92, 55 + reservations * 4) : 82;
   const checkedIn = bookings.filter((booking) =>
@@ -272,8 +413,8 @@ export default function AdminDashboard() {
                 <strong>{formatCurrency(refundEstimate)}</strong>
               </div>
               <div className="metric-row">
-                <span>Outstanding</span>
-                <strong>{formatCurrency(revenue * 0.21)}</strong>
+                <span>Low stock alerts</span>
+                <strong>{lowStockItems}</strong>
               </div>
             </div>
           </div>
@@ -282,9 +423,9 @@ export default function AdminDashboard() {
             <span className="eyebrow">Alerts</span>
             <h3>Operational notes</h3>
             <ul className="alert-list">
-              <li>Housekeeping roster is 96% staffed.</li>
-              <li>2 VIP arrivals need concierge preparation.</li>
-              <li>Restaurant inventory for breakfast is trending low.</li>
+              {alerts.map((alert) => (
+                <li key={alert}>{alert}</li>
+              ))}
             </ul>
           </div>
         </div>
