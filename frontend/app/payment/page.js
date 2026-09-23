@@ -18,7 +18,7 @@ function PaymentContent() {
   const guest = searchParams.get("guest") || "Guest";
   const hotel = searchParams.get("hotel") || "Asteria";
   const room = searchParams.get("room") || "Deluxe Stay";
-  const nights = Number(searchParams.get("nights") || 1);
+  const nights = Number(searchParams.get("nights") || 1);`nconst bookingId = searchParams.get("booking_id") || "";`nconst bookingId = searchParams.get("booking_id") || "";
   const [method, setMethod] = useState("UPI");
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState({ type: "", message: "" });
@@ -218,3 +218,5 @@ export default function PaymentPage() {
     </Suspense>
   );
 }
+
+
