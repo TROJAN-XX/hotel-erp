@@ -21,6 +21,7 @@ class PaymentTransaction(models.Model):
     currency = models.CharField(max_length=10, default="INR")
     payment_method = models.CharField(max_length=30, choices=PAYMENT_METHOD_CHOICES, default="UPI")
     gateway = models.CharField(max_length=60, default="Razorpay")
+    booking = models.ForeignKey('bookings.Booking', on_delete=models.SET_NULL, null=True, blank=True, related_name='payments')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
     reference_id = models.CharField(max_length=120, unique=True)
     note = models.TextField(blank=True, default="")

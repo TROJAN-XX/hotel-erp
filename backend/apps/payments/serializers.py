@@ -12,6 +12,7 @@ class PaymentTransactionSerializer(serializers.ModelSerializer):
             "currency",
             "payment_method",
             "gateway",
+            "booking",
             "status",
             "reference_id",
             "note",
