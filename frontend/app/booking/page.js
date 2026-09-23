@@ -171,7 +171,7 @@ export default function BookingPage() {
       }
 
       const guestName = data.guest_name || form.guest_name;
-      const successUrl = `/payment?amount=${encodeURIComponent(String(estimatedTotal))}&guest=${encodeURIComponent(guestName)}&hotel=${encodeURIComponent(selectedHotel?.name || "Asteria")}&room=${encodeURIComponent(selectedRoom?.name || "Suite")}&nights=${encodeURIComponent(String(nights))}`;
+      const successUrl = `/payment?amount=${encodeURIComponent(String(estimatedTotal))}&guest=${encodeURIComponent(guestName)}&hotel=${encodeURIComponent(selectedHotel?.name || "Asteria")}&room=${encodeURIComponent(selectedRoom?.name || "Suite")}&nights=${encodeURIComponent(String(nights))}&booking_id=${encodeURIComponent(String(data.id))}`;
 
       setStatus({
         type: "success",
@@ -430,4 +430,5 @@ export default function BookingPage() {
     </div>
   );
 }
+
 
