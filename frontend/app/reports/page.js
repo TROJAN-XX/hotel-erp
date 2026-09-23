@@ -1,28 +1,111 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { fetchApi, normalizeListResponse } from "../../lib/api";
 
-const reportMetrics = [
-  { label: "Revenue", value: "₹48.6L", change: "+12.4%" },
-  { label: "Occupancy", value: "86%", change: "+5.1%" },
-  { label: "Guest score", value: "4.8/5", change: "+0.3" },
-  { label: "Refunds", value: "₹2.3L", change: "-1.8%" },
-];
+const formatCurrency = (value) =>
+  new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(Number(value || 0));
 
-const salesRows = [
-  { name: "Rooms", value: "₹21.4L", share: "44%" },
-  { name: "Dining", value: "₹12.1L", share: "25%" },
-  { name: "Spa & wellness", value: "₹7.8L", share: "16%" },
-  { name: "Tours & transport", value: "₹5.7L", share: "12%" },
-  { name: "Packages", value: "₹1.6L", share: "3%" },
-];
-
-const reportHistory = [
-  { period: "This week", type: "Operational", status: "Healthy" },
-  { period: "Last 30 days", type: "Revenue", status: "Rising" },
-  { period: "This month", type: "Reservations", status: "Stable" },
-  { period: "Q2 forecast", type: "Forecast", status: "Positive" },
+const fallbackReports = [
+  {
+    title: "Monthly overview",
+    report_type: "monthly",
+    total_revenue: 486000,
+    total_bookings: 128,
+    summary: "Strong occupancy and repeat guest demand.",
+    generated_at: new Date().toISOString(),
+  },
+  {
+    title: "Last 30 days",
+    report_type: "weekly",
+    total_revenue: 332000,
+    total_bookings: 92,
+    summary: "Dining and wellness demand remain elevated.",
+    generated_at: new Date(Date.now() - 86400000 * 7).toISOString(),
+  },
 ];
 
 export default function ReportsPage() {
+  const [reports, setReports] = useState(fallbackReports);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadReports() {
+      try {
+        const response = await fetchApi("/reports/sales/");
+        if (!isMounted) return;
+        const liveReports = normalizeListResponse(response);
+        setReports(liveReports.length ? liveReports : fallbackReports);
+      } catch (error) {
+        if (isMounted) setReports(fallbackReports);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    loadReports();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const revenueTotal = reports.reduce(
+    (sum, item) => sum + Number(item.total_revenue || 0),
+    0,
+  );
+  const bookingTotal = reports.reduce(
+    (sum, item) => sum + Number(item.total_bookings || 0),
+    0,
+  );
+
+  const reportMetrics = [
+    { label: "Revenue", value: formatCurrency(revenueTotal), change: "+12.4%" },
+    { label: "Occupancy", value: "86%", change: "+5.1%" },
+    { label: "Guest score", value: "4.8/5", change: "+0.3" },
+    {
+      label: "Total bookings",
+      value: String(bookingTotal || 128),
+      change: "+18.2%",
+    },
+  ];
+
+  const salesRows = [
+    { name: "Rooms", value: formatCurrency(revenueTotal * 0.44), share: "44%" },
+    {
+      name: "Dining",
+      value: formatCurrency(revenueTotal * 0.25),
+      share: "25%",
+    },
+    {
+      name: "Spa & wellness",
+      value: formatCurrency(revenueTotal * 0.16),
+      share: "16%",
+    },
+    {
+      name: "Tours & transport",
+      value: formatCurrency(revenueTotal * 0.12),
+      share: "12%",
+    },
+    {
+      name: "Packages",
+      value: formatCurrency(revenueTotal * 0.03),
+      share: "3%",
+    },
+  ];
+
+  const reportHistory = reports.slice(0, 4).map((row) => ({
+    period: row.title || "Latest report",
+    type: row.report_type || "Monthly",
+    status: row.summary ? "Healthy" : "Positive",
+  }));
+
   return (
     <div className="customer-shell">
       <header className="topbar">
@@ -124,7 +207,7 @@ export default function ReportsPage() {
               </thead>
               <tbody>
                 {reportHistory.map((row) => (
-                  <tr key={row.period}>
+                  <tr key={`${row.period}-${row.type}`}>
                     <td>{row.period}</td>
                     <td>{row.type}</td>
                     <td>
@@ -135,6 +218,8 @@ export default function ReportsPage() {
               </tbody>
             </table>
           </div>
+
+          {loading ? <p className="eyebrow">Loading reports…</p> : null}
         </div>
       </main>
     </div>

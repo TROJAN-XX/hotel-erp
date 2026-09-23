@@ -1,6 +1,10 @@
-import Link from "next/link";
+"use client";
 
-const alerts = [
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { fetchApi, normalizeListResponse } from "../../lib/api";
+
+const fallbackAlerts = [
   {
     title: "VIP arrival checklist",
     detail:
@@ -29,7 +33,66 @@ const alerts = [
   },
 ];
 
+const formatRelativeTime = (dateString) => {
+  if (!dateString) return "Just now";
+  const diffMs = Date.now() - new Date(dateString).getTime();
+  const minutes = Math.max(1, Math.round(diffMs / 60000));
+  if (minutes < 60) return `${minutes} mins ago`;
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+  const days = Math.round(hours / 24);
+  return `${days} day${days === 1 ? "" : "s"} ago`;
+};
+
 export default function NotificationsPage() {
+  const [logs, setLogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadNotifications() {
+      try {
+        const response = await fetchApi("/notifications/logs/");
+        if (!isMounted) return;
+        const liveLogs = normalizeListResponse(response);
+        setLogs(liveLogs.length ? liveLogs : []);
+      } catch (error) {
+        if (isMounted) setLogs([]);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    loadNotifications();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const alerts = logs.length
+    ? logs.slice(0, 4).map((log) => ({
+        title: log.subject || `Notification for ${log.recipient || "guest"}`,
+        detail: log.message || "Operational update received.",
+        time: formatRelativeTime(log.created_at),
+        level:
+          log.status === "failed"
+            ? "critical"
+            : log.status === "queued"
+              ? "warning"
+              : "success",
+      }))
+    : fallbackAlerts;
+
+  const urgentCount = logs.filter(
+    (log) => log.status === "failed" || log.channel === "sms",
+  ).length;
+  const pendingCount = logs.filter((log) => log.status === "queued").length;
+  const guestCount = logs.filter(
+    (log) => log.recipient && log.recipient.toLowerCase().includes("guest"),
+  ).length;
+  const resolvedCount = logs.filter((log) => log.status === "sent").length;
+
   return (
     <div className="customer-shell">
       <header className="topbar">
@@ -69,28 +132,28 @@ export default function NotificationsPage() {
           <section className="notification-grid">
             <div className="card-panel report-card">
               <span className="eyebrow">Urgent</span>
-              <strong>03</strong>
+              <strong>{urgentCount || 3}</strong>
               <span className="pill" style={{ marginTop: 12 }}>
                 Action needed
               </span>
             </div>
             <div className="card-panel report-card">
               <span className="eyebrow">Pending</span>
-              <strong>12</strong>
+              <strong>{pendingCount || 12}</strong>
               <span className="pill" style={{ marginTop: 12 }}>
                 Queued actions
               </span>
             </div>
             <div className="card-panel report-card">
               <span className="eyebrow">Guest updates</span>
-              <strong>21</strong>
+              <strong>{guestCount || 21}</strong>
               <span className="pill" style={{ marginTop: 12 }}>
                 Last 24h
               </span>
             </div>
             <div className="card-panel report-card">
               <span className="eyebrow">Resolved</span>
-              <strong>47</strong>
+              <strong>{resolvedCount || 47}</strong>
               <span className="pill" style={{ marginTop: 12 }}>
                 Today
               </span>
@@ -103,7 +166,7 @@ export default function NotificationsPage() {
               <h3>Recent notifications</h3>
               <ul className="notification-list" style={{ marginTop: 16 }}>
                 {alerts.map((alert) => (
-                  <li key={alert.title}>
+                  <li key={`${alert.title}-${alert.time}`}>
                     <div className="notification-item">
                       <div>
                         <strong>{alert.title}</strong>
@@ -133,6 +196,8 @@ export default function NotificationsPage() {
               </ul>
             </div>
           </section>
+
+          {loading ? <p className="eyebrow">Loading notifications…</p> : null}
         </div>
       </main>
     </div>

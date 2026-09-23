@@ -1,43 +1,142 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { fetchApi, normalizeListResponse } from "../../lib/api";
 
-const inventoryOverview = [
-  { label: "Total stock units", value: "8,240", tone: "success" },
-  { label: "Low stock alerts", value: "11", tone: "warning" },
-  { label: "Pending reorders", value: "07", tone: "critical" },
-  { label: "Turnover rate", value: "94%", tone: "success" },
-];
-
-const stockRows = [
+const fallbackInventory = [
   {
-    item: "Fresh linens",
-    status: "Healthy",
-    count: "620 units",
-    reorder: "No",
+    name: "Fresh linens",
+    current_stock: 620,
+    reorder_level: 150,
+    unit: "units",
   },
   {
-    item: "Breakfast ingredients",
-    status: "Low",
-    count: "84 units",
-    reorder: "Yes",
+    name: "Breakfast ingredients",
+    current_stock: 84,
+    reorder_level: 180,
+    unit: "units",
   },
-  { item: "Spa oils", status: "Healthy", count: "240 units", reorder: "No" },
+  { name: "Spa oils", current_stock: 240, reorder_level: 100, unit: "units" },
   {
-    item: "Housekeeping consumables",
-    status: "Critical",
-    count: "52 units",
-    reorder: "Yes",
+    name: "Housekeeping consumables",
+    current_stock: 52,
+    reorder_level: 120,
+    unit: "units",
   },
-  { item: "Bar spirits", status: "Healthy", count: "310 units", reorder: "No" },
+  {
+    name: "Bar spirits",
+    current_stock: 310,
+    reorder_level: 120,
+    unit: "units",
+  },
 ];
 
-const movementLog = [
-  { label: "Rooms received", value: "+42" },
-  { label: "Dining issued", value: "-18" },
-  { label: "Spa stock returned", value: "+9" },
-  { label: "Bar transfers", value: "-7" },
+const fallbackMovements = [
+  { item: "Rooms received", quantity: 42, movement_type: "inbound" },
+  { item: "Dining issued", quantity: -18, movement_type: "outbound" },
+  { item: "Spa stock returned", quantity: 9, movement_type: "inbound" },
+  { item: "Bar transfers", quantity: -7, movement_type: "outbound" },
 ];
+
+const formatStockStatus = (item) => {
+  if (!item || item.current_stock === 0) return "Critical";
+  if (item.current_stock <= Number(item.reorder_level || 0)) return "Low";
+  return "Healthy";
+};
 
 export default function InventoryPage() {
+  const [inventoryItems, setInventoryItems] = useState(fallbackInventory);
+  const [movementLog, setMovementLog] = useState(fallbackMovements);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadInventoryData() {
+      try {
+        const [itemsResponse, movementsResponse] = await Promise.allSettled([
+          fetchApi("/inventory/items/"),
+          fetchApi("/inventory/movements/"),
+        ]);
+
+        if (!isMounted) return;
+
+        const liveItems = normalizeListResponse(
+          itemsResponse.status === "fulfilled" ? itemsResponse.value : [],
+        );
+        const liveMovements = normalizeListResponse(
+          movementsResponse.status === "fulfilled"
+            ? movementsResponse.value
+            : [],
+        );
+
+        setInventoryItems(liveItems.length ? liveItems : fallbackInventory);
+        setMovementLog(
+          liveMovements.length ? liveMovements : fallbackMovements,
+        );
+      } catch (error) {
+        if (isMounted) {
+          setInventoryItems(fallbackInventory);
+          setMovementLog(fallbackMovements);
+        }
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    loadInventoryData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const stockRows = (inventoryItems || fallbackInventory).map((item) => {
+    const status = formatStockStatus(item);
+    return {
+      item: item.name,
+      status,
+      count: `${item.current_stock ?? 0} ${item.unit ?? "units"}`,
+      reorder:
+        item.current_stock <= Number(item.reorder_level || 0) ? "Yes" : "No",
+    };
+  });
+
+  const totalStock = inventoryItems.reduce(
+    (sum, item) => sum + Number(item.current_stock || 0),
+    0,
+  );
+  const lowAlerts = inventoryItems.filter(
+    (item) =>
+      Number(item.current_stock || 0) <= Number(item.reorder_level || 0),
+  ).length;
+  const pendingReorders = inventoryItems.filter(
+    (item) =>
+      Number(item.current_stock || 0) <= Number(item.reorder_level || 0),
+  ).length;
+
+  const inventoryOverview = [
+    {
+      label: "Total stock units",
+      value: totalStock.toLocaleString("en-IN"),
+      tone: "success",
+    },
+    { label: "Low stock alerts", value: String(lowAlerts), tone: "warning" },
+    {
+      label: "Pending reorders",
+      value: String(pendingReorders),
+      tone: "critical",
+    },
+    { label: "Turnover rate", value: "94%", tone: "success" },
+  ];
+
+  const movementRows = (movementLog || fallbackMovements)
+    .slice(0, 4)
+    .map((entry) => ({
+      label: entry.item || entry.reference || "Inventory update",
+      value: `${entry.quantity > 0 ? "+" : ""}${entry.quantity || 0}`,
+    }));
+
   return (
     <div className="customer-shell">
       <header className="topbar">
@@ -135,7 +234,7 @@ export default function InventoryPage() {
               <span className="eyebrow">Movement</span>
               <h3>Daily adjustments</h3>
               <ul className="alert-list" style={{ marginTop: 18 }}>
-                {movementLog.map((entry) => (
+                {movementRows.map((entry) => (
                   <li key={entry.label}>
                     <div className="notification-item">
                       <span>{entry.label}</span>
@@ -146,6 +245,8 @@ export default function InventoryPage() {
               </ul>
             </div>
           </section>
+
+          {loading ? <p className="eyebrow">Loading stock data…</p> : null}
         </div>
       </main>
     </div>
