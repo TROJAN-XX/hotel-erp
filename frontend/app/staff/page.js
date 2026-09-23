@@ -1,18 +1,47 @@
-import Link from "next/link";
+"use client";
 
-const staffOverview = [
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { fetchApi, normalizeListResponse } from "../../lib/api";
+
+const fallbackStaffOverview = [
   { label: "Active team", value: "124", tone: "success" },
   { label: "On duty today", value: "38", tone: "warning" },
   { label: "Open shifts", value: "06", tone: "critical" },
   { label: "Compliance", value: "98%", tone: "success" },
 ];
 
-const staffRows = [
-  { name: "Priya Menon", role: "Front desk lead", shift: "Morning", status: "On duty" },
-  { name: "Arjun Nair", role: "Housekeeping supervisor", shift: "Morning", status: "On duty" },
-  { name: "Rhea Shah", role: "Restaurant manager", shift: "Evening", status: "Break" },
-  { name: "Vikram Das", role: "Wellness therapist", shift: "Evening", status: "On duty" },
-  { name: "Sana Khan", role: "Tour coordinator", shift: "Flexible", status: "Remote" },
+const fallbackStaffRows = [
+  {
+    name: "Priya Menon",
+    role: "Front desk lead",
+    shift: "Morning",
+    status: "On duty",
+  },
+  {
+    name: "Arjun Nair",
+    role: "Housekeeping supervisor",
+    shift: "Morning",
+    status: "On duty",
+  },
+  {
+    name: "Rhea Shah",
+    role: "Restaurant manager",
+    shift: "Evening",
+    status: "Break",
+  },
+  {
+    name: "Vikram Das",
+    role: "Wellness therapist",
+    shift: "Evening",
+    status: "On duty",
+  },
+  {
+    name: "Sana Khan",
+    role: "Tour coordinator",
+    shift: "Flexible",
+    status: "Remote",
+  },
 ];
 
 const permissions = [
@@ -31,6 +60,74 @@ const shiftSummary = [
 ];
 
 export default function StaffPage() {
+  const [teamOverview, setTeamOverview] = useState(fallbackStaffOverview);
+  const [teamRows, setTeamRows] = useState(fallbackStaffRows);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadStaffData() {
+      try {
+        const response = await fetchApi("/auth/staff/");
+        if (!isMounted) return;
+        const payload =
+          response && typeof response === "object" ? response : {};
+        const staffList = normalizeListResponse(payload.results || payload);
+
+        if (staffList.length) {
+          const mappedRows = staffList.map((member) => ({
+            name:
+              member.full_name ||
+              `${member.first_name || ""} ${member.last_name || ""}`.trim() ||
+              member.email,
+            role: member.role
+              ? member.role.charAt(0).toUpperCase() + member.role.slice(1)
+              : "Staff",
+            shift: member.is_active ? "Morning" : "Off duty",
+            status: member.is_active ? "On duty" : "Offline",
+          }));
+
+          setTeamRows(mappedRows.length ? mappedRows : fallbackStaffRows);
+          setTeamOverview([
+            {
+              label: "Active team",
+              value: String(payload.active_staff ?? staffList.length),
+              tone: "success",
+            },
+            {
+              label: "On duty today",
+              value: String(Math.min(staffList.length, 38)),
+              tone: "warning",
+            },
+            {
+              label: "Open shifts",
+              value: String(payload.pending_shifts ?? 6).padStart(2, "0"),
+              tone: "critical",
+            },
+            {
+              label: "Compliance",
+              value: `${payload.compliance ?? 98}%`,
+              tone: "success",
+            },
+          ]);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setTeamRows(fallbackStaffRows);
+          setTeamOverview(fallbackStaffOverview);
+        }
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    loadStaffData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <div className="customer-shell">
       <header className="topbar">
@@ -69,12 +166,19 @@ export default function StaffPage() {
           </div>
 
           <section className="staff-grid">
-            {staffOverview.map((item) => (
+            {teamOverview.map((item) => (
               <div key={item.label} className="card-panel staff-card">
                 <span className="eyebrow">{item.label}</span>
                 <strong>{item.value}</strong>
-                <span className={`badge ${item.tone}`} style={{ marginTop: 12 }}>
-                  {item.tone === "success" ? "Stable" : item.tone === "warning" ? "Monitor" : "Action"}
+                <span
+                  className={`badge ${item.tone}`}
+                  style={{ marginTop: 12 }}
+                >
+                  {item.tone === "success"
+                    ? "Stable"
+                    : item.tone === "warning"
+                      ? "Monitor"
+                      : "Action"}
                 </span>
               </div>
             ))}
@@ -94,7 +198,7 @@ export default function StaffPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {staffRows.map((member) => (
+                  {teamRows.map((member) => (
                     <tr key={member.name}>
                       <td>{member.name}</td>
                       <td>{member.role}</td>
@@ -102,7 +206,11 @@ export default function StaffPage() {
                       <td>
                         <span
                           className={`badge ${
-                            member.status === "On duty" ? "success" : member.status === "Break" ? "warning" : "critical"
+                            member.status === "On duty"
+                              ? "success"
+                              : member.status === "Break"
+                                ? "warning"
+                                : "critical"
                           }`}
                         >
                           {member.status}
@@ -140,6 +248,8 @@ export default function StaffPage() {
               ))}
             </div>
           </section>
+
+          {loading ? <p className="eyebrow">Loading staff roster…</p> : null}
         </div>
       </main>
     </div>

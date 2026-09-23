@@ -12,6 +12,28 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["id", "email", "first_name", "last_name", "phone_number", "role"]
 
 
+class StaffDirectorySerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+            "full_name",
+            "phone_number",
+            "role",
+            "is_active",
+            "date_joined",
+        ]
+
+    def get_full_name(self, obj):
+        full_name = " ".join(filter(None, [obj.first_name, obj.last_name]))
+        return full_name or obj.email
+
+
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
 

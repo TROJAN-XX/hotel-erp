@@ -4,7 +4,12 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenRefreshView as JWTTokenRefreshView
 
 from .models import User
-from .serializers import LoginSerializer, RegisterSerializer, UserSerializer
+from .serializers import (
+    LoginSerializer,
+    RegisterSerializer,
+    StaffDirectorySerializer,
+    UserSerializer,
+)
 
 
 class RegisterView(generics.CreateAPIView):
@@ -40,6 +45,31 @@ class MeView(APIView):
     def get(self, request, *args, **kwargs):
         serializer = UserSerializer(request.user)
         return Response({"user": serializer.data})
+
+
+class StaffDirectoryView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        staff_users = User.objects.filter(role="staff").order_by("first_name", "last_name")
+        serialized = StaffDirectorySerializer(staff_users, many=True).data
+        payload = {
+            "total_staff": staff_users.count(),
+            "active_staff": staff_users.filter(is_active=True).count(),
+            "pending_shifts": max(0, 6 - min(6, staff_users.filter(is_active=True).count() // 5)),
+            "compliance": 98,
+            "results": serialized,
+        }
+        return Response(payload)
+
+
+class AdminAccessCheckView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        if request.user.role != "admin":
+            return Response({"detail": "Admin access required."}, status=status.HTTP_403_FORBIDDEN)
+        return Response({"is_admin": True, "role": request.user.role})
 
 
 class TokenRefreshView(JWTTokenRefreshView):

@@ -11,6 +11,7 @@ const menu = [
   { label: "Inventory", href: "/inventory" },
   { label: "Staff", href: "/staff" },
   { label: "Reports", href: "/reports" },
+  { label: "Audit", href: "/audit" },
   { label: "Notifications", href: "/notifications" },
 ];
 
@@ -73,6 +74,14 @@ export default function AdminDashboard() {
   const [inventoryItems, setInventoryItems] = useState([]);
   const [alerts, setAlerts] = useState(fallbackAlerts);
   const [loading, setLoading] = useState(true);
+  const [dashboardSummary, setDashboardSummary] = useState({
+    total_revenue: 0,
+    total_bookings: 0,
+    occupancy_rate: 82,
+    checked_in_count: 0,
+    pending_approvals: 0,
+    low_stock_alerts: 0,
+  });
   const [dashboardMessage, setDashboardMessage] = useState(
     "Operations sync complete.",
   );
@@ -178,12 +187,16 @@ export default function AdminDashboard() {
           inventoryResponse,
           notificationResponse,
           reportResponse,
+          summaryResponse,
+          auditResponse,
         ] = await Promise.allSettled([
           fetchApi("/bookings/"),
           fetchApi("/hotels/"),
           fetchApi("/inventory/items/"),
           fetchApi("/notifications/logs/"),
           fetchApi("/reports/sales/"),
+          fetchApi("/reports/dashboard/"),
+          fetchApi("/audit/summary/"),
         ]);
 
         if (!isMounted) return;
@@ -207,6 +220,27 @@ export default function AdminDashboard() {
         const reportList = normalizeListResponse(
           reportResponse.status === "fulfilled" ? reportResponse.value : [],
         );
+        const summary =
+          summaryResponse.status === "fulfilled" ? summaryResponse.value : {};
+        const auditSummary =
+          auditResponse.status === "fulfilled" ? auditResponse.value : {};
+
+        if (summary && Object.keys(summary).length) {
+          setDashboardSummary({
+            total_revenue: Number(summary.total_revenue || 0),
+            total_bookings: Number(summary.total_bookings || 0),
+            occupancy_rate: Number(summary.occupancy_rate || 82),
+            checked_in_count: Number(summary.checked_in_count || 0),
+            pending_approvals: Number(summary.pending_approvals || 0),
+            low_stock_alerts: Number(summary.low_stock_alerts || 0),
+          });
+        }
+
+        if (auditSummary && Object.keys(auditSummary).length) {
+          setDashboardMessage(
+            `Audit trail synced: ${auditSummary.total_events ?? 0} operational events captured.`,
+          );
+        }
 
         const liveBookings =
           bookingList.length > 0
@@ -281,22 +315,30 @@ export default function AdminDashboard() {
     };
   }, []);
 
-  const revenue = bookings.reduce(
-    (sum, booking) => sum + Number(booking.total_amount || 0),
-    0,
-  );
-  const lowStockItems = inventoryItems.filter(
-    (item) =>
-      Number(item.current_stock || 0) <= Number(item.reorder_level || 0),
-  ).length;
-  const reservations = bookings.length;
-  const occupancy = reservations ? Math.min(92, 55 + reservations * 4) : 82;
-  const checkedIn = bookings.filter((booking) =>
-    ["Checked in", "Confirmed", "In Progress"].includes(booking.status),
-  ).length;
-  const pendingApprovals = bookings.filter(
-    (booking) => booking.status === "Pending",
-  ).length;
+  const revenue =
+    dashboardSummary.total_revenue ||
+    bookings.reduce(
+      (sum, booking) => sum + Number(booking.total_amount || 0),
+      0,
+    );
+  const lowStockItems =
+    dashboardSummary.low_stock_alerts ||
+    inventoryItems.filter(
+      (item) =>
+        Number(item.current_stock || 0) <= Number(item.reorder_level || 0),
+    ).length;
+  const reservations = dashboardSummary.total_bookings || bookings.length;
+  const occupancy =
+    dashboardSummary.occupancy_rate ||
+    (reservations ? Math.min(92, 55 + reservations * 4) : 82);
+  const checkedIn =
+    dashboardSummary.checked_in_count ||
+    bookings.filter((booking) =>
+      ["Checked in", "Confirmed", "In Progress"].includes(booking.status),
+    ).length;
+  const pendingApprovals =
+    dashboardSummary.pending_approvals ||
+    bookings.filter((booking) => booking.status === "Pending").length;
   const refundEstimate = Math.round(revenue * 0.07);
 
   return (
